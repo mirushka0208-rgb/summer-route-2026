@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Евротур 2026 · Маршрут на утверждение</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<style>
+  :root{
+    --paper:#F4EFE6;
+    --paper-2:#EDE6D8;
+    --ink:#1C2A31;
+    --ink-soft:#3C4A50;
+    --muted:#7E7263;
+    --line:#D9CFBE;
+    --terracotta:#C2603A;
+    --teal:#2E6E73;
+    --gold:#B0852C;
+    --danish:#A23B34;
+    --paris:#33414E;
+    --ice:#5A6E7C;
+    --flag-red:#B23A2E;
+    --flag-amber:#B0852C;
+    --flag-idea:#2E6E73;
+    --shadow:0 1px 0 rgba(28,42,49,.04), 0 10px 30px -18px rgba(28,42,49,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Hanken Grotesk',system-ui,sans-serif;
+    font-size:16px;line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    background-image:radial-gradient(circle at 1px 1px, rgba(28,42,49,.04) 1px, transparent 0);
+    background-size:22px 22px;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+
+  /* ---- top nav ---- */
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:rgba(244,239,230,.86);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar .wrap{display:flex;align-items:center;gap:16px;height:54px}
+  .topbar .brand{font-family:'Fraunces',serif;font-weight:900;letter-spacing:.02em;font-size:17px;white-space:nowrap}
+  .topbar .brand span{color:var(--terracotta)}
+  .navchips{display:flex;gap:6px;overflow-x:auto;flex:1;scrollbar-width:none}
+  .navchips::-webkit-scrollbar{display:none}
+  .navchips a{
+    font-size:12.5px;font-weight:600;color:var(--ink-soft);text-decoration:none;
+    padding:5px 10px;border:1px solid var(--line);border-radius:999px;white-space:nowrap;
+    transition:.18s;
+  }
+  .navchips a:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .btn-print{
+    border:1px solid var(--line);background:none;color:var(--ink-soft);
+    font:inherit;font-size:12.5px;font-weight:600;padding:5px 12px;border-radius:999px;cursor:pointer;white-space:nowrap;
+  }
+  .btn-print:hover{background:var(--ink);color:var(--paper)}
+
+  /* ---- hero ---- */
+  .hero{padding:64px 0 36px;position:relative}
+  .eyebrow{font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:var(--terracotta);font-weight:700;margin-bottom:14px}
+  .hero h1{
+    font-family:'Fraunces',serif;font-weight:900;line-height:.92;
+    font-size:clamp(48px,9vw,104px);letter-spacing:-.02em;
+  }
+  .hero h1 em{font-style:italic;font-weight:500;color:var(--terracotta)}
+  .hero .sub{margin-top:18px;font-size:clamp(17px,2.2vw,21px);color:var(--ink-soft);max-width:62ch}
+  .hero .sub b{color:var(--ink);font-weight:700}
+  .statrow{display:flex;flex-wrap:wrap;gap:0;margin-top:34px;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff8ec70}
+  .stat{flex:1 1 140px;padding:16px 18px;border-right:1px solid var(--line)}
+  .stat:last-child{border-right:none}
+  .stat b{display:block;font-family:'Fraunces',serif;font-weight:900;font-size:26px;line-height:1}
+  .stat span{font-size:12.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+  /* ---- legend ---- */
+  .legend{display:flex;flex-wrap:wrap;gap:10px 18px;margin:30px 0 8px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .legend .l{display:inline-flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft);font-weight:600}
+  .dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+  .dot.air{background:var(--paris)} .dot.train{background:#3f7a4f} .dot.drive{background:var(--terracotta)} .dot.sea{background:var(--teal)} .dot.stay{background:var(--muted)}
+
+  /* ---- stage ---- */
+  .stage{margin-top:46px;opacity:0;transform:translateY(14px);animation:rise .7s cubic-bezier(.2,.7,.2,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .stage-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding-bottom:6px;border-bottom:2px solid var(--sc,var(--ink))}
+  .stage-num{font-family:'Fraunces',serif;font-weight:900;font-size:15px;color:var(--sc,var(--ink));letter-spacing:.05em}
+  .stage-head h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(24px,4vw,34px);letter-spacing:-.01em;flex:1}
+  .stage-head h2 .flags{font-size:.8em;margin-right:8px}
+  .stage-meta{font-size:13.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+
+  /* ---- day ---- */
+  .day{display:grid;grid-template-columns:132px 1fr;gap:0 20px;padding:18px 0;border-bottom:1px solid var(--line);position:relative}
+  .day:last-child{border-bottom:none}
+  .daydate{text-align:left;padding-top:2px}
+  .dayphoto{width:132px;height:90px;object-fit:cover;border-radius:9px;margin-top:10px;display:block;cursor:zoom-in;transition:.3s;box-shadow:0 1px 6px rgba(0,0,0,.15)}
+  .dayphoto:hover{transform:scale(1.03);filter:brightness(1.05)}
+  .daydate .d{font-family:'Fraunces',serif;font-weight:900;font-size:22px;line-height:1}
+  .daydate .wd{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-top:3px}
+  .daydate .n{display:inline-block;margin-top:7px;font-size:10.5px;color:var(--sc,var(--ink));border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-weight:700}
+  .daybody{min-width:0}
+  .loc{font-family:'Fraunces',serif;font-weight:600;font-size:19px;letter-spacing:-.01em;line-height:1.2}
+  .loc .arrow{color:var(--terracotta);font-style:normal;padding:0 2px}
+  .leg{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;font-weight:600;padding:4px 10px;border-radius:8px;line-height:1.2}
+  .leg.air{background:#33414e12;color:var(--paris);border:1px solid #33414e2e}
+  .leg.train{background:#3f7a4f12;color:#2f5d3b;border:1px solid #3f7a4f2e}
+  .leg.drive{background:#c2603a14;color:var(--terracotta);border:1px solid #c2603a33}
+  .leg.sea{background:#2e6e7314;color:var(--teal);border:1px solid #2e6e7333}
+  .leg.stay{background:#7e726312;color:var(--muted);border:1px solid var(--line)}
+  .leg .ic{font-size:14px}
+  .prog{margin-top:9px;font-size:14px;color:var(--ink-soft);line-height:1.5}
+  .meta2{margin-top:9px;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+  .meta2 .h{color:var(--ink);font-weight:600}
+  .tag{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px}
+  .tag.unesco{background:#b0852c1f;color:#8a6818}
+  .tag.show{background:#c2603a1f;color:var(--terracotta)}
+  .tag.kid{background:#2e6e731c;color:var(--teal)}
+
+  /* ---- review panel ---- */
+  .panel{margin-top:60px;background:#fff8ec5e;border:1px solid var(--line);border-radius:18px;padding:30px 28px;box-shadow:var(--shadow)}
+  .panel h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(24px,4vw,32px);letter-spacing:-.01em}
+  .panel .lead{color:var(--ink-soft);margin-top:6px;max-width:70ch}
+  .flags-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px;margin-top:24px}
+  .flag{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--fc);border-radius:10px;padding:14px 16px}
+  .flag .ft{font-weight:700;font-size:14.5px;display:flex;gap:8px;align-items:baseline}
+  .flag .sev{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--fc);white-space:nowrap}
+  .flag p{font-size:13.5px;color:var(--ink-soft);margin-top:7px;line-height:1.5}
+  .flag .fix{font-size:13px;margin-top:8px;color:var(--ink)}
+  .flag .fix b{color:var(--fc)}
+  .flag.red{--fc:var(--flag-red)} .flag.amber{--fc:var(--flag-amber)} .flag.idea{--fc:var(--flag-idea)}
+
+  /* ---- budget ---- */
+  .budget{margin-top:46px}
+  .budget h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(22px,3.5vw,30px)}
+  .btable{margin-top:18px;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .brow{display:flex;justify-content:space-between;gap:16px;padding:12px 18px;border-bottom:1px solid var(--line);font-size:14.5px}
+  .brow:last-child{border-bottom:none}
+  .brow .c{color:var(--ink-soft)} .brow .v{font-family:'Fraunces',serif;font-weight:700;white-space:nowrap}
+  .brow.total{background:var(--ink);color:var(--paper)} .brow.total .c{color:#cfc6b6} .brow.total .v{color:#fff}
+  .note{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.6}
+
+  /* ---- footer ---- */
+  footer{margin:60px 0 50px;padding-top:24px;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+  footer a{color:var(--teal);font-weight:600;text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  @media(max-width:620px){
+    .day{grid-template-columns:104px 1fr;gap:0 14px}
+    .dayphoto{width:104px;height:70px;margin-top:8px}
+    .daydate .d{font-size:18px}
+    .hero{padding:40px 0 24px}
+    .stat{flex-basis:33%}
+  }
+  @media print{
+    .topbar,.btn-print{display:none}
+    body{background:#fff;font-size:12px}
+    .stage,.day,.flag,.panel{break-inside:avoid;animation:none;opacity:1;transform:none}
+    .hero{padding:10px 0}
+    .map{height:300px} .mapcard,.gantt,.cruise .cc,.sec{break-inside:avoid}
+  }
+
+  /* ===== enhancements ===== */
+  .collage{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:32px;border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+  .collage img{width:100%;height:148px;object-fit:cover;display:block;cursor:zoom-in;transition:.35s;filter:saturate(1.02)}
+  .collage img:hover{filter:brightness(1.07) saturate(1.1)}
+  @media(max-width:620px){.collage{grid-template-columns:repeat(2,1fr)}.collage img{height:118px}}
+
+  .sec{margin-top:64px}
+  .sec>h2{font-family:'Fraunces',serif;font-weight:900;font-size:clamp(26px,4.6vw,40px);letter-spacing:-.015em;line-height:1}
+  .sec>.sublead{color:var(--ink-soft);margin-top:8px;max-width:76ch;font-size:15.5px}
+
+  .gantt{margin-top:26px;border:1px solid var(--line);border-radius:14px;padding:22px 24px 16px;background:#fff8ec55;overflow-x:auto}
+  .gantt-inner{min-width:540px}
+  .gantt-axis{position:relative;height:18px;margin-left:118px;border-bottom:1px dashed var(--line)}
+  .gantt-axis span{position:absolute;transform:translateX(-50%);font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap}
+  .grow{display:flex;align-items:center;height:32px;margin-top:7px}
+  .glbl{width:118px;flex:none;font-size:12px;font-weight:700;color:var(--ink);padding-right:12px;text-align:right;line-height:1.05}
+  .gtrack{position:relative;flex:1;height:22px;border-radius:4px;background:repeating-linear-gradient(90deg,transparent,transparent calc(8.823%*1 - 1px),var(--line) calc(8.823%),var(--line) calc(8.823%))}
+  .gbar{position:absolute;height:22px;border-radius:6px;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:10.5px;font-weight:800;white-space:nowrap;overflow:hidden;box-shadow:0 1px 5px rgba(0,0,0,.16);top:0}
+  .gmark{position:absolute;top:2px;width:14px;height:14px;border-radius:50%;background:var(--terracotta);border:2px solid #fff;transform:translateX(-50%);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+  .gmark-lbl{position:absolute;font-size:10.5px;font-weight:800;color:var(--terracotta);white-space:nowrap;transform:translateX(-50%);top:-2px}
+  @media(max-width:620px){.glbl{width:78px;font-size:10px}.gantt-axis{margin-left:78px}}
+
+  .maprow{display:grid;grid-template-columns:1fr;gap:22px;margin-top:24px}
+  .mapcard{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff;box-shadow:var(--shadow)}
+  .mapcard .mh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:14px 18px;background:var(--paper-2);flex-wrap:wrap}
+  .mapcard .mh b{font-family:'Fraunces',serif;font-size:18px;font-weight:700}
+  .mapcard .mh .mstat{font-size:12.5px;color:var(--ink-soft);font-weight:700}
+  .mapcard .mh .mstat em{font-style:normal;color:var(--terracotta)}
+  .map{height:430px;width:100%;background:#dce4e6}
+  .leaflet-container{font-family:'Hanken Grotesk',sans-serif;font-size:13px}
+  .route-pin{background:var(--teal);color:#fff;border-radius:50%;width:23px;height:23px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.35)}
+
+  .gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:8px;margin:16px 0 6px}
+  .gallery figure{margin:0;border-radius:10px;overflow:hidden;position:relative;background:var(--paper-2);aspect-ratio:4/3}
+  .gallery img{width:100%;height:100%;object-fit:cover;display:block;cursor:zoom-in;transition:.4s}
+  .gallery figure:hover img{transform:scale(1.06)}
+  .gallery figcaption{position:absolute;left:0;right:0;bottom:0;font-size:11px;font-weight:700;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.7));padding:16px 8px 6px;pointer-events:none}
+
+  .cruise{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:24px}
+  .cc{border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--paper);box-shadow:var(--shadow)}
+  .cc.nor{border-top:5px solid var(--teal)} .cc.ice{border-top:5px solid var(--ice)}
+  .cc h3{font-family:'Fraunces',serif;font-size:21px;font-weight:700;display:flex;align-items:center;gap:9px}
+  .verdict{display:inline-block;margin:12px 0 4px;font-size:11.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:5px 11px;border-radius:7px;background:#2e6e731a;color:var(--teal)}
+  .verdict.keep{background:#3f7a4f1c;color:#2f5d3b}
+  .cc p{font-size:13.5px;color:var(--ink-soft);line-height:1.58;margin-top:9px}
+  .cc b{color:var(--ink)}
+  .cc details{margin-top:13px;border-top:1px solid var(--line);padding-top:11px}
+  .cc summary{font-size:13px;font-weight:700;cursor:pointer;color:var(--teal)}
+  .cc details table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px}
+  .cc details td{padding:5px 7px;border-bottom:1px solid var(--line);color:var(--ink-soft);vertical-align:top}
+  .cc details tr td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+  .srcs{font-size:11.5px;color:var(--muted);margin-top:18px;line-height:1.7}
+  .srcs a{color:var(--teal);text-decoration:none}
+  @media(max-width:760px){.cruise{grid-template-columns:1fr}}
+
+  #lb{position:fixed;inset:0;background:rgba(18,26,30,.93);display:none;align-items:center;justify-content:center;z-index:200;cursor:zoom-out;padding:28px}
+  #lb.on{display:flex}
+  #lb img{max-width:94%;max-height:88%;border-radius:8px;box-shadow:0 24px 70px rgba(0,0,0,.6)}
+  #lb .cap{position:absolute;bottom:22px;left:0;right:0;text-align:center;color:#fff;font-size:13.5px;font-weight:600}
+
+  /* ===== optimization marks ===== */
+  .optgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+  .optcard{border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--paper);border-top:4px solid var(--oc);box-shadow:var(--shadow)}
+  .optcard.cut{--oc:#b23a2e} .optcard.rest{--oc:#3f7a4f} .optcard.pace{--oc:#b0852c}
+  .optcard b{font-size:14.5px;color:var(--oc)} .optcard p{font-size:13px;color:var(--ink-soft);margin-top:7px;line-height:1.5}
+  .optcard p b{color:var(--ink);font-size:13px} .optcard p span{display:inline-block;margin-top:7px;font-weight:800;color:var(--oc);font-size:12px}
+  .optlegend{margin-top:16px;font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  @media(max-width:760px){.optgrid{grid-template-columns:1fr}}
+  .optbar{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:800;padding:4px 10px;border-radius:7px;margin-bottom:9px;line-height:1.3}
+  .optbar.cut{background:#b23a2e16;color:#b23a2e;border:1px solid #b23a2e3d}
+  .optbar.pace{background:#b0852c1c;color:#8a6818;border:1px solid #b0852c3d}
+  .optbar.rest{background:#3f7a4f1c;color:#2f5d3b;border:1px solid #3f7a4f3d}
+  .day.marked .loc{opacity:.97}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">ЕВРОТУР <span>2026</span></div>
+    <nav class="navchips">
+      <a href="#s1">Тбилиси</a>
+      <a href="#s2">Крит</a>
+      <a href="#s3">Копенгаген</a>
+      <a href="#s4">Париж</a>
+      <a href="#s5">Норвегия</a>
+      <a href="#s6">Исландия</a>
+      <a href="#stay">🏨 Жильё</a>
+      <a href="#s7">Домой</a>
+      <a href="#review">⚑ Переезды</a>
+    </nav>
+    <button class="btn-print" onclick="window.print()">Печать / PDF</button>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Финальный маршрут · версия 3</div>
+    <h1>Большой <em>евротур</em><br>лето 2026</h1>
+    <p class="sub">35 дней от Кавказа до Арктики: <b>Грузия → Греция → Дания → Франция → Норвегия → Исландия → Германия</b>. Путешествуют <b>2 взрослых + ребёнок</b> (8 лет). 12 июня → 16 июля · в Париже у друзей.</p>
+    <div class="statrow">
+      <div class="stat"><b>35</b><span>дней</span></div>
+      <div class="stat"><b>7</b><span>стран</span></div>
+      <div class="stat"><b>23</b><span>ночёвки</span></div>
+      <div class="stat"><b>12</b><span>перелётов</span></div>
+      <div class="stat"><b>2</b><span>авто</span></div>
+      <div class="stat"><b>2</b><span>концерта</span></div>
+    </div>
+    <div class="legend">
+      <span class="l"><span class="dot air"></span>Перелёт</span>
+      <span class="l"><span class="dot train"></span>Поезд</span>
+      <span class="l"><span class="dot drive"></span>Авто</span>
+      <span class="l"><span class="dot sea"></span>Паром / круиз</span>
+      <span class="l"><span class="dot stay"></span>На месте</span>
+      <span class="l"><span class="tag unesco">UNESCO</span></span>
+      <span class="l"><span class="tag show">🎤 концерт</span></span>
+    </div>
+    <div class="collage" id="collage"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- GANTT -->
+  <section class="sec" id="gantt">
+    <h2>Хронология поездки</h2>
+    <p class="sublead">Диаграмма Ганта: как 35 дней распределены по этапам. Норвегия (9 ночей) и Исландия (11 ночей) — по-прежнему ядро поездки; Париж теперь длиннее (5 ночей у друзей).</p>
+    <div class="gantt"><div class="gantt-inner">
+      <div class="gantt-axis">
+        <span style="left:0%">12.06</span>
+        <span style="left:20.59%">19.06</span>
+        <span style="left:41.18%">26.06</span>
+        <span style="left:61.76%">03.07</span>
+        <span style="left:82.35%">10.07</span>
+        <span style="left:100%">16.07</span>
+      </div>
+      <div class="grow"><div class="glbl">🇬🇪 Тбилиси</div><div class="gtrack"><div class="gbar" style="left:0%;width:8.82%;background:var(--gold)">3н</div></div></div>
+      <div class="grow"><div class="glbl">🇬🇷 Крит</div><div class="gtrack"><div class="gbar" style="left:8.82%;width:8.82%;background:var(--terracotta)">3н</div></div></div>
+      <div class="grow"><div class="glbl">🇩🇰 Копенгаген</div><div class="gtrack"><div class="gbar" style="left:20.59%;width:5.88%;background:var(--danish)">1н</div></div></div>
+      <div class="grow"><div class="glbl">🇫🇷 Париж</div><div class="gtrack"><div class="gbar" style="left:26.47%;width:11.76%;background:var(--paris)">5н · у друзей</div></div></div>
+      <div class="grow"><div class="glbl">🇳🇴 Норвегия</div><div class="gtrack"><div class="gbar" style="left:38.24%;width:26.47%;background:var(--teal)">9 ночей · фьорды</div></div></div>
+      <div class="grow"><div class="glbl">🇮🇸 Исландия</div><div class="gtrack"><div class="gbar" style="left:64.71%;width:32.35%;background:var(--ice)">11 ночей · Ring Road</div></div></div>
+      <div class="grow"><div class="glbl">🇩🇪 Франкфурт</div><div class="gtrack"><div class="gbar" style="left:97.06%;width:2.94%;background:var(--muted)"></div></div></div>
+      <div class="grow"><div class="glbl">🎤 Концерты</div><div class="gtrack" style="overflow:visible">
+        <div class="gmark" style="left:20.59%"></div><div class="gmark-lbl" style="left:20.59%;top:-15px">Weeknd 19.06</div>
+        <div class="gmark" style="left:26.47%"></div><div class="gmark-lbl" style="left:26.47%;top:23px">Bruno Mars 21.06</div>
+      </div></div>
+    </div></div>
+  </section>
+
+  <!-- MAPS -->
+  <section class="sec" id="maps">
+    <h2>Авто-перегоны — на карте</h2>
+    <p class="sublead">Машина теперь только в двух местах: Норвегия и исландский Ring Road (Крит — без аренды, MSM — поездом, Париж — метро). Реальная дорожная геометрия этих двух участков:</p>
+    <div class="maprow">
+      <div class="mapcard">
+        <div class="mh"><b>🇳🇴 Норвегия · Берген → Олесунн</b><span class="mstat"><em>665 км · ~12 ч руля</em> · фьорды, перевалы, ставкирки, RIB</span></div>
+        <div class="map" id="map-norway"></div>
+      </div>
+      <div class="mapcard">
+        <div class="mh"><b>🇮🇸 Исландия · Ring Road (разгружено)</b><span class="mstat"><em>1335 км · ~19.6 ч руля</em> · без восточного крюка · обратно самолётом</span></div>
+        <div class="map" id="map-iceland"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CRUISE -->
+  <section class="sec" id="cruise">
+    <h2>Круиз или авто? — Норвегия и Исландия</h2>
+    <p class="sublead">Ты спросил, не взять ли круиз. Разобрал оба этапа (актуальные варианты лета 2026, твои фиксированные даты, состав с ребёнком). Короткий ответ: <b>по обоим — оставляем авто</b>, но Исландию стоит разгрузить.</p>
+    <div class="cruise">
+      <div class="cc nor">
+        <h3>🇳🇴 Норвегия</h3>
+        <span class="verdict keep">Вердикт: оставляем авто</span>
+        <p><b>Круиз не вмещается по датам.</b> Окно между Парижем (21.06) и вылетом в Исландию (04.07) — это 24.06–02.07. Ближайшие порты посадки (Копенгаген, Киль) — в 1–2 днях пути, а 7-дневные фьорд-круизы (MSC Euribia и т. п.) уходят 27–28.06 и возвращаются ~04–05.07 → на рейс в Исландию уже не успеть.</p>
+        <p><b>И теряешь лучшее.</b> Ставкирки (Borgund, Urnes, Lom), перевалы Sognefjellet 1434 м и Trollstigen, смотровая Stegastein, деревни Люстра-фьорда — всё это <b>только на машине</b>. Hurtigruten — северный каботаж до Арктики (Киркенес), а не южные фьорды.</p>
+        <p><b>«Фьорд с воды» у тебя уже есть</b> — без круиза: дневной круиз по Nærøyfjord (2 ч, ~€40 взр / €25 реб) и часовой по Geirangerfjord. Это и есть гибрид — вода без минусов большого лайнера.</p>
+        <details><summary>Какие круизы вообще есть (справочно)</summary>
+          <table>
+            <tr><td>MSC Euribia</td><td>Копенгаген→Гейрангер→Олесунн→Флом · 7н · ~$2,5–3,5к/3 чел · даты не бьются</td></tr>
+            <tr><td>Windstar / Viking</td><td>Копенгаген→фьорды · 7н · ~$17–21к/3 чел</td></tr>
+            <tr><td>Hurtigruten</td><td>Берген→Киркенес — идёт на СЕВЕР, минует южные фьорды</td></tr>
+          </table>
+        </details>
+      </div>
+      <div class="cc ice">
+        <h3>🇮🇸 Исландия</h3>
+        <span class="verdict keep">Вердикт: авто, но разгрузить</span>
+        <p><b>Круиз вокруг острова минует весь юг.</b> Он ходит только по побережью (Вестфирдир, Акюрейри, Хусавик, Сейдисфьордюр, острова) и <b>не даёт</b> Золотое кольцо, Йёкюльсаурлоун + Diamond Beach, Skaftafell, Seljalandsfoss, Skógafoss, Reynisfjara — то, ради чего едут в первый раз.</p>
+        <p><b>Дорого и не по датам.</b> Премиальные экспедиционные круизы — $13–19к с человека → <b>$40–60к на троих</b> против ~$10к за руль. Расписания тоже не совпадают (Lindblad заканчивается 09.07, Adventure Canada 03–13.07, HX распродан на пик).</p>
+        <p><b>Рекомендация — разгрузить кольцо:</b> убрать самый тяжёлый перегон Хёбн→Сейдисфьордюр (~5 ч, восточные фьорды) и добавить вторые ночи в Вике и Хёбне. Тогда 7 из 11 дней — ≤2 ч руля, а все иконы остаются. Круиз — это для <b>второй</b> поездки (Вестфирдир + Арктика).</p>
+        <p style="font-size:12px;color:var(--muted)">⚠️ Заметка 2026: пляж Reynisfjara частично размыло штормами зимы 2025–26 — базальтовые колонны на месте, но сам пляж меньше.</p>
+        <details><summary>Облегчённый вариант кольца (11 ночей)</summary>
+          <table>
+            <tr><td>1–2</td><td>Рейкьявик — Blue Lagoon, киты</td></tr>
+            <tr><td>3</td><td>Юг (Hella): Золотое кольцо — Þingvellir, Geysir, Gullfoss</td></tr>
+            <tr><td>4–5</td><td>Вик ×2: Seljalandsfoss, Skógafoss, Reynisfjara</td></tr>
+            <tr><td>6–7</td><td>Хёбн ×2: Skaftafell, Jökulsárlón + Diamond Beach (целый день)</td></tr>
+            <tr><td>8–9</td><td>Mývatn ×2: Krafla, Hverir, бани, Dettifoss</td></tr>
+            <tr><td>10–11</td><td>Акюрейри/Хусавик: киты, Goðafoss → 14.07 самолёт в Рейкьявик</td></tr>
+          </table>
+          <p style="font-size:12px">Минус к текущему: убираются Сейдисфьордюр и (опционально) Snæfellsnes/Kirkjufell — последнее можно оставить отдельным днём, но вернётся темп. На твоё решение.</p>
+        </details>
+      </div>
+    </div>
+    <p class="srcs">Источники: MSC · Hurtigruten · Cruisebound (Норвегия) · Lindblad · Adventure Canada · HX · Guide to Iceland (Исландия). Полный список ссылок — в чате.</p>
+  </section>
+
+  <!-- WHAT CHANGED -->
+  <section class="sec" id="optim">
+    <h2>Что изменено в финале <span style="font-weight:400;font-size:.5em;color:var(--muted);letter-spacing:0">— применено</span></h2>
+    <p class="sublead">Финальная версия после всех правок: меньше за рулём, без лишних переездов, больше под ребёнка. Дни отдыха помечены ✅ прямо в маршруте ниже.</p>
+    <div class="optgrid">
+      <div class="optcard rest"><b>🚗 Меньше за рулём</b><p>Исландия разгружена: убран крюк в Сейдисфьордюр (~5 ч), <b>+2-е ночи в Вике и Хёбне</b>. Крит — без аренды (катер+тур), Mont-Saint-Michel — поездом.<span>3 авто-участка → 2</span></p></div>
+      <div class="optcard rest"><b>✈️ +Осло (обновлено)</b><p>Решение пересмотрено: <b>вход через Осло</b> (Париж→Осло + живописный поезд Bergensbanen в Берген). Берген/Флом сжаты до 1 ночи, Ставангер — 2 (Прейкестулен).<span>+Осло 2 ночи</span></p></div>
+      <div class="optcard rest"><b>👧 Под ребёнка</b><p>Детские точки в каждой стране + день в Parc Astérix, Cité des Enfants и зоопарк в Париже. Копенгаген сжат до 1 дня, Париж — 5 ночей у друзей.<span>дети 8 лет</span></p></div>
+    </div>
+    <p class="optlegend"><span class="optbar rest">✅ день отдыха</span><span class="optbar pace">⚠ длинный день — ранний старт</span> · 👧 — детские активности на датах ниже.</p>
+  </section>
+
+  <!-- ЖИЛЬЁ — ПОДБОРКИ ПО ЭТАПАМ -->
+  <section class="sec" id="stay">
+    <style>
+      #stay .swrap{background:#fffaf2;border:1px solid #e7dac6;border-radius:16px;padding:18px 20px;margin-top:8px}
+      #stay .supd{background:#fff3da;border:1px solid #ecd9b6;border-radius:12px;padding:12px 14px;margin:6px 0 16px;font-size:13.5px;line-height:1.55}
+      #stay .scountry{font-family:Georgia,serif;font-size:18px;color:#5a3e2b;margin:18px 0 2px}
+      #stay .srow{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding:9px 2px;border-bottom:1px solid #efe6d6}
+      #stay .scity{font-weight:700;font-size:15.5px;color:#5a3e2b;min-width:215px}
+      #stay .sdt{color:#7c6650;font-size:13px}
+      #stay .schips{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}
+      #stay .schips a{font-size:12.5px;text-decoration:none;border:1px solid #e7dac6;border-radius:8px;padding:4px 9px;background:#fff;color:#5a3e2b;white-space:nowrap}
+      #stay .schips a.bk{background:#eef4ff;border-color:#cfe0ff;color:#274b8f}
+      #stay .schips a.ab{background:#ffeef0;border-color:#ffd4da;color:#9c2d3c}
+      #stay .schips a.pk{background:#fdf0d9;border-color:#eccf9a;color:#9a6418;font-weight:600}
+      #stay .snote{margin-top:16px;font-size:13px;color:#6b563c;line-height:1.6}
+    </style>
+    <h2>🏨 Жильё — подборки по этапам <span style="font-weight:400;font-size:.5em;color:var(--muted)">для подбора отелей ассистентом</span></h2>
+    <p class="sublead">Клик по <b>«Подборка»</b> → отфильтрованный Booking на наши даты (2 взр + 1 реб, по рейтингу). <b>🔖</b> = рекомендованный отель сразу на Booking/сайте. <b>🏠</b> = поиск Airbnb. Везде брать тарифы с бесплатной отменой.</p>
+    <div class="swrap">
+      <div class="supd">
+        <b>⚑ Обновления после версии 3 (учесть при подборе):</b><br>
+        • <b>+Осло</b> — вход в Норвегию через Осло (Париж→Осло + поезд Bergensbanen в Берген). Берген и Флом теперь по 1 ночи, Ставангер — 2 (Прейкестулен).<br>
+        • <b>Исландия = ОТЕЛИ + аренда авто</b> (кэмпер отменён): цепочка отелей по Кольцу + автомат 2WD/SUV.<br>
+        • <b>Атлантическая дорога</b> (опция): тогда 01–02.07 база — Кристиансунн/Аверёй вместо Олесунна.<br>
+        • <b>Копенгаген</b> — уточнить состав (2 взр или семья из 3).
+      </div>
+
+      <div class="scountry">🇬🇪 Грузия</div>
+      <div class="srow"><span class="scity">Тбилиси</span><span class="sdt">12–15.06 · 3н · AURA Tbilisi Living ✅ куплено</span></div>
+
+      <div class="scountry">🇬🇷 Крит</div>
+      <div class="srow"><span class="scity">🏖️ Ханья / Крит</span><span class="sdt">15–18.06 · 3н · на берегу + бассейн</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Chania%20Crete&checkin=2026-06-15&checkout=2026-06-18&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Chania--Greece/homes?checkin=2026-06-15&checkout=2026-06-18&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/gr/cavo-spada-luxury-resort-spa.html?checkin=2026-06-15&checkout=2026-06-18&group_adults=2&group_children=1&age=8">🔖 Cavo Spada</a><a class="pk" target="_blank" href="https://villaisalos.com/">🔖 вилла Isalos</a></span></div>
+
+      <div class="scountry">🇩🇰 Дания</div>
+      <div class="srow"><span class="scity">🎡 Копенгаген</span><span class="sdt">18–20.06 · концерт 19.06</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Copenhagen&checkin=2026-06-18&checkout=2026-06-20&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Copenhagen--Denmark/homes?checkin=2026-06-18&checkout=2026-06-20&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://hotelsanders.com/">🔖 Hotel Sanders</a></span></div>
+
+      <div class="scountry">🇫🇷 Франция</div>
+      <div class="srow"><span class="scity">🗼 Париж</span><span class="sdt">20–25.06 · жильё НЕ нужно (у друзей)</span></div>
+
+      <div class="scountry">🇳🇴 Норвегия <span style="font-size:13px;color:#7c6650;font-weight:400">(7 в Booking-списке частично)</span></div>
+      <div class="srow"><span class="scity">🏙️ Осло ✅</span><span class="sdt">25–27.06 · 2н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Oslo&checkin=2026-06-25&checkout=2026-06-27&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Oslo--Norway/homes?checkin=2026-06-25&checkout=2026-06-27&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/no/amerikalinjen.html?checkin=2026-06-25&checkout=2026-06-27&group_adults=2&group_children=1&age=8">🔖 Amerikalinjen</a></span></div>
+      <div class="srow"><span class="scity">⚓ Берген ✅</span><span class="sdt">27–28.06 · 1н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Bergen&checkin=2026-06-27&checkout=2026-06-28&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Bergen--Norway/homes?checkin=2026-06-27&checkout=2026-06-28&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/no/opus-xvi.html?checkin=2026-06-27&checkout=2026-06-28&group_adults=2&group_children=1&age=8">🔖 Opus XVI</a></span></div>
+      <div class="srow"><span class="scity">🚂 Флом ✅</span><span class="sdt">28–29.06 · 1н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Fl%C3%A5m&checkin=2026-06-28&checkout=2026-06-29&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Flam--Norway/homes?checkin=2026-06-28&checkout=2026-06-29&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/no/fretheim.html?checkin=2026-06-28&checkout=2026-06-29&group_adults=2&group_children=1&age=8">🔖 Fretheim</a></span></div>
+      <div class="srow"><span class="scity">⛰️ Сольворн</span><span class="sdt">29–30.06 · 1н · напрямую</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Solvorn&checkin=2026-06-29&checkout=2026-06-30&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Solvorn--Norway/homes?checkin=2026-06-29&checkout=2026-06-30&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.walaker.com/">🔖 Walaker (сайт)</a></span></div>
+      <div class="srow"><span class="scity">🏔️ Гейрангер</span><span class="sdt">30.06–01.07 · 1н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Geiranger&checkin=2026-06-30&checkout=2026-07-01&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Geiranger--Norway/homes?checkin=2026-06-30&checkout=2026-07-01&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.hotelunion.no/">🔖 Hotel Union</a></span></div>
+      <div class="srow"><span class="scity">🌊 Олесунн</span><span class="sdt">01–02.07 · 1н · или Кристиансунн</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=%C3%85lesund&checkin=2026-07-01&checkout=2026-07-02&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Alesund--Norway/homes?checkin=2026-07-01&checkout=2026-07-02&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/no/brosundet.html?checkin=2026-07-01&checkout=2026-07-02&group_adults=2&group_children=1&age=8">🔖 Brosundet</a></span></div>
+      <div class="srow"><span class="scity">🪨 Ставангер</span><span class="sdt">02–04.07 · 2н · Прейкестулен · напрямую</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Stavanger&checkin=2026-07-02&checkout=2026-07-04&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Stavanger--Norway/homes?checkin=2026-07-02&checkout=2026-07-04&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://eilertsmith.no/">🔖 Eilert Smith (сайт)</a></span></div>
+
+      <div class="scountry">🇮🇸 Исландия <span style="font-size:13px;color:#7c6650;font-weight:400">(отели + аренда авто)</span></div>
+      <div class="srow"><span class="scity">🌋 Рейкьявик</span><span class="sdt">04–06.07 · 2н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Reykjavik&checkin=2026-07-04&checkout=2026-07-06&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Reykjavik--Iceland/homes?checkin=2026-07-04&checkout=2026-07-06&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/is/borg.html?checkin=2026-07-04&checkout=2026-07-06&group_adults=2&group_children=1&age=8">🔖 Hotel Borg</a></span></div>
+      <div class="srow"><span class="scity">🏞️ Snæfellsnes</span><span class="sdt">06–07.07 · 1н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Snaefellsnes&checkin=2026-07-06&checkout=2026-07-07&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Snaefellsnes--Iceland/homes?checkin=2026-07-06&checkout=2026-07-07&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/is/budir-snaefellsbaer.html?checkin=2026-07-06&checkout=2026-07-07&group_adults=2&group_children=1&age=8">🔖 Hótel Búðir</a></span></div>
+      <div class="srow"><span class="scity">💦 Golden Circle / Hella</span><span class="sdt">07–08.07 · 1н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Hella%20Iceland&checkin=2026-07-07&checkout=2026-07-08&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Hella--Iceland/homes?checkin=2026-07-07&checkout=2026-07-08&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/is/ranga-hella.html?checkin=2026-07-07&checkout=2026-07-08&group_adults=2&group_children=1&age=8">🔖 Hótel Rangá</a></span></div>
+      <div class="srow"><span class="scity">🖤 Вик</span><span class="sdt">08–10.07 · 2н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Vik%20Iceland&checkin=2026-07-08&checkout=2026-07-10&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Vik--Iceland/homes?checkin=2026-07-08&checkout=2026-07-10&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/is/kria.html?checkin=2026-07-08&checkout=2026-07-10&group_adults=2&group_children=1&age=8">🔖 Hótel Kría</a></span></div>
+      <div class="srow"><span class="scity">🧊 Хёбн / лагуна</span><span class="sdt">10–12.07 · 2н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Hofn%20Iceland&checkin=2026-07-10&checkout=2026-07-12&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Hofn--Iceland/homes?checkin=2026-07-10&checkout=2026-07-12&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/is/fosshotel-glacier-lagoon.html?checkin=2026-07-10&checkout=2026-07-12&group_adults=2&group_children=1&age=8">🔖 Fosshotel Glacier Lagoon</a></span></div>
+      <div class="srow"><span class="scity">♨️ Mývatn</span><span class="sdt">12–13.07 · 1н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Myvatn&checkin=2026-07-12&checkout=2026-07-13&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Myvatn--Iceland/homes?checkin=2026-07-12&checkout=2026-07-13&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/is/dimmuborgir-guesthouse.html?checkin=2026-07-12&checkout=2026-07-13&group_adults=2&group_children=1&age=8">🔖 Dimmuborgir</a></span></div>
+      <div class="srow"><span class="scity">🐋 Акюрейри</span><span class="sdt">13–14.07 · 1н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Akureyri&checkin=2026-07-13&checkout=2026-07-14&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Akureyri--Iceland/homes?checkin=2026-07-13&checkout=2026-07-14&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/is/hotelkea.html?checkin=2026-07-13&checkout=2026-07-14&group_adults=2&group_children=1&age=8">🔖 Hotel Kea</a></span></div>
+      <div class="srow"><span class="scity">✈️ Кефлавик (KEF)</span><span class="sdt">14–15.07 · 1н · перед вылетом</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Keflavik&checkin=2026-07-14&checkout=2026-07-15&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Keflavik--Iceland/homes?checkin=2026-07-14&checkout=2026-07-15&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/hotel/is/berg.html?checkin=2026-07-14&checkout=2026-07-15&group_adults=2&group_children=1&age=8">🔖 Hotel Berg</a></span></div>
+
+      <div class="scountry">🇩🇪 Германия</div>
+      <div class="srow"><span class="scity">🛫 Франкфурт (аэропорт)</span><span class="sdt">15–16.07 · 1н</span><span class="schips"><a class="bk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Frankfurt%20Airport&checkin=2026-07-15&checkout=2026-07-16&group_adults=2&group_children=1&age=8&order=bayesian_review_score">Подборка</a><a class="ab" target="_blank" href="https://www.airbnb.com/s/Frankfurt--Germany/homes?checkin=2026-07-15&checkout=2026-07-16&adults=2&children=1">🏠</a><a class="pk" target="_blank" href="https://www.booking.com/searchresults.html?ss=Sheraton%20Frankfurt%20Airport&checkin=2026-07-15&checkout=2026-07-16&group_adults=2&group_children=1&age=8">🔖 Sheraton</a></span></div>
+
+      <div class="snote">
+        <b>✅ Уже в Booking:</b> список «Eurotrip 2026 — Норвегия» (7 отелей Осло/Бергена/Флома) — <a target="_blank" href="https://www.booking.com/mywishlist.html?wl_id=3903729521">открыть список</a>.<br>
+        <b>⚠️ Прямые брони (срочно, маленькие):</b> Walaker (walaker.com), Eilert Smith (eilertsmith.no, +47 480 50 800). Виллы Крита — по запросу, летом часто min 5–7 ночей.<br>
+        <b>🚗 Аренда авто:</b> Норвегия one-way Берген→Олесунн (28.06–02.07, AWD-автомат); Исландия автомат 2WD/SUV (НЕ 4×4), KEF↔KEF 04–15.07, all-in ~€1700–2700. Пред-трип: IDP (Венская 1968) + кредитка на водителя.<br>
+        <b>📄 Полный бриф для ассистента:</b> <a target="_blank" href="https://docs.google.com/document/d/1iLOJouPAuQZU9_238UMD-K66i27SRLIdikRImkbEXTM/edit">Google Doc</a> · карточки с описаниями: <a target="_blank" href="eurotrip_accommodations_hygge.html">лукбук</a> · кликалка-индекс: <a target="_blank" href="eurotrip_index.html">индекс</a>.
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 1 -->
+  <section class="stage" id="s1" style="--sc:var(--gold);animation-delay:.02s">
+    <div class="stage-head">
+      <span class="stage-num">ЭТАП 1</span>
+      <h2><span class="flags">🇬🇪</span>Тбилиси</h2>
+      <span class="stage-meta">12–15.06 · 3 ночи · AURA Tbilisi Living ✅</span>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">12</div><div class="wd">Пт · июн</div><div class="n">ночь 1</div></div>
+      <div class="daybody">
+        <div class="loc">Алматы <span class="arrow">↳</span> Тбилиси</div>
+        <span class="leg air"><span class="ic">✈</span> KC135 · ALA→TBS · 13:00–16:00 · 4ч прямой · Business</span>
+        <div class="prog">Прилёт 16:00 · трансфер 40 мин · заселение в апартаменты AURA · ужин Barbarestan · прогулка по Агмашенебели.</div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">13</div><div class="wd">Сб · июн</div><div class="n">ночь 2</div></div>
+      <div class="daybody">
+        <div class="loc">Тбилиси</div>
+        <span class="leg stay"><span class="ic">●</span> На месте</span>
+        <div class="prog">Канатка к Нарикала (IV в.) · Абанотубани (серные бани) · Мост Мира · обед Shavi Lomi · ужин Culinarium Khasheria.</div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">14</div><div class="wd">Вс · июн</div><div class="n">ночь 3</div></div>
+      <div class="daybody">
+        <div class="loc">Тбилиси <span class="arrow">↳</span> Мцхета <span class="arrow">↳</span> Тбилиси</div>
+        <span class="leg drive"><span class="ic">⌖</span> Водитель на день (~$80)</span>
+        <div class="prog">Светицховели (XI в.) · Джвари (VI в.) · Ананури (XVI–XVII в.) · виды слияния Куры и Арагви.</div>
+        <div class="meta2"><span class="tag unesco">UNESCO · Мцхета</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 2 -->
+  <section class="stage" id="s2" style="--sc:var(--terracotta);animation-delay:.04s">
+    <div class="stage-head">
+      <span class="stage-num">ЭТАП 2</span>
+      <h2><span class="flags">🇬🇷</span>Крит · Ханья</h2>
+      <span class="stage-meta">15–18.06 · 3 ночи · Domes Zeen 5★</span>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">15</div><div class="wd">Пн · июн</div><div class="n">ночь 4</div></div>
+      <div class="daybody">
+        <div class="loc">Тбилиси <span class="arrow">↳</span> Ханья</div>
+        <span class="leg air"><span class="ic">✈</span> KC141 + Aegean · TBS→ATH→CHQ · 13:00–18:30 · через Афины · Y</span>
+        <div class="prog">Вылет 13:00 · стыковка в Афинах · заселение 20:00 · ужин Tamam (в хамаме XVII в.).</div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">16</div><div class="wd">Вт · июн</div><div class="n">ночь 5</div></div>
+      <div class="daybody">
+        <div class="loc">Крит · Балос + Грамвуса</div>
+        <span class="leg drive"><span class="ic">⌖</span> в Kissamos · 45 мин</span>
+        <span class="leg sea"><span class="ic">⛵</span> катер Lagoon Balos · 6ч</span>
+        <div class="prog">10:00 катер на лагуну Балос · остров Грамвуса (венецианская крепость) · обед · ужин Manousakis Winery.</div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">17</div><div class="wd">Ср · июн</div><div class="n">ночь 6</div></div>
+      <div class="daybody">
+        <div class="loc">Крит · Elafonissi</div>
+        <span class="leg stay"><span class="ic">●</span> организованный тур · без аренды авто</span>
+        <div class="prog">Elafonissi (розовый песок, мелководье — идеально для 8 лет) · Топольский монастырь (XVII в.) · ужин Salis в Старом порту.</div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">18</div><div class="wd">Чт · июн</div><div class="n">→ Париж</div></div>
+      <div class="daybody">
+        <div class="loc">Ханья <span class="arrow">↳</span> Париж</div>
+        <span class="leg air"><span class="ic">✈</span> Transavia · CHQ→ORY · <b>утром ~07:00–10:00</b> · 3ч50м прямой</span>
+        <div class="prog">Ранний вылет из Ханьи · прилёт в Париж (Орли) днём · день и вечер в Париже у друзей. ребёнок остаётся с ними на время концертов (19–20).</div>
+        <div class="meta2"><span class="tag kid">👧 ребёнок → к друзьям</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 3 -->
+  <section class="stage" id="s3" style="--sc:var(--danish);animation-delay:.06s">
+    <div class="stage-head">
+      <span class="stage-num">ЭТАП 3</span>
+      <h2><span class="flags">🇩🇰</span>Копенгаген</h2>
+      <span class="stage-meta">19–20.06 · 1 ночь · Hotel Østerport · ради The Weeknd</span>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">19</div><div class="wd">Пт · июн</div><div class="n">ночь 8</div></div>
+      <div class="daybody">
+        <div class="loc">Париж <span class="arrow">↳</span> Копенгаген</div>
+        <span class="leg air"><span class="ic">✈</span> AF1750 · CDG→CPH · 13:00–14:55 · 1ч55м · 2 чел</span>
+        <div class="prog">Прилёт 14:55 · отель Østerport (10 мин до Parken) · ужин Pluto. ребёнок остаётся у друзей в Париже.</div>
+        <div class="meta2"><span class="tag show">🎤 The Weeknd · 20:00 · Parken · Sector A9 · билеты куплены</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">20</div><div class="wd">Сб · июн</div><div class="n">→ Париж</div></div>
+      <div class="daybody">
+        <div class="loc">Копенгаген <span class="arrow">↳</span> Париж</div>
+        <span class="leg stay"><span class="ic">●</span> день в городе</span>
+        <span class="leg air"><span class="ic">✈</span> вечерний CPH→CDG ~19:00–21:00 · Air France/SAS · 2 чел</span>
+        <div class="prog">Nyhavn · Rosenborg · канал-кораблик · Tivoli · вечером рейс в Париж, к друзьям. 1 дня хватает — концерт был накануне.</div>
+        <div class="meta2"><span class="tag kid">👧 вечером воссоединение с ребёнок</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 4 -->
+  <section class="stage" id="s4" style="--sc:var(--paris);animation-delay:.08s">
+    <div class="stage-head">
+      <span class="stage-num">ЭТАП 4</span>
+      <h2><span class="flags">🇫🇷</span>Париж · у друзей</h2>
+      <span class="stage-meta">21–24.06 · детский Париж + MSM поездом · без отеля и авто</span>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">21</div><div class="wd">Вс · июн</div><div class="n">ночь 10</div></div>
+      <div class="daybody">
+        <div class="loc">Париж · с ребёнком</div>
+        <span class="leg stay"><span class="ic">●</span> у друзей · метро</span>
+        <div class="prog">Cité des Enfants (наука руками, La Villette) · Эйфелева башня (2-й уровень) · кораблик по Сене (Bateaux Parisiens).</div>
+        <div class="meta2"><span class="tag kid">👧 Cité des Enfants</span><span class="tag show">🎤 Bruno Mars · 20:30 · Stade de France · опция</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">22</div><div class="wd">Пн · июн</div><div class="n">ночь 11</div></div>
+      <div class="daybody">
+        <div class="loc">Parc Astérix</div>
+        <span class="leg train"><span class="ic">▭</span> RER B + шаттл · ~75–90 мин</span>
+        <div class="prog">День в парке аттракционов: Pégase Express, рафтинг Romus et Rapidus, гальская деревня, шоу дельфинов. Билеты Futé за 7+ дней.</div>
+        <div class="meta2"><span class="tag kid">🎢 Parc Astérix — день-выезд</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">23</div><div class="wd">Вт · июн</div><div class="n">ночь 12</div></div>
+      <div class="daybody">
+        <div class="loc">Париж <span class="arrow">↳</span> Mont Saint-Michel <span class="arrow">↳</span> Париж</div>
+        <span class="leg train"><span class="ic">▭</span> TGV Монпарнас→Ренн ~1ч25 + шаттл ~1ч10 · без машины</span>
+        <div class="prog">День-выезд к аббатству поездом (ребёнок отдыхает в пути): прогулка по дамбе, аббатство, омлет La Mère Poulard · вечером назад к друзьям.</div>
+        <div class="meta2"><span class="tag unesco">UNESCO · Mont-Saint-Michel</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">24</div><div class="wd">Ср · июн</div><div class="n">ночь 13</div></div>
+      <div class="daybody">
+        <div class="loc">Париж · зоопарк</div>
+        <span class="leg stay"><span class="ic">●</span> у друзей · метро</span>
+        <div class="prog">Зоопарк Парижа (Венсен) — жирафы, львы, биозоны по континентам · спокойный день, рынок · сборы перед Норвегией.</div>
+        <div class="meta2"><span class="tag kid">👧 Зоопарк Венсен</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 5 -->
+  <section class="stage" id="s5" style="--sc:var(--teal);animation-delay:.1s">
+    <div class="stage-head">
+      <span class="stage-num">ЭТАП 5</span>
+      <h2><span class="flags">🇳🇴</span>Норвегия · фьорды</h2>
+      <span class="stage-meta">25.06–04.07 · 9 ночей · прямой рейс в Берген, без Осло</span>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">25</div><div class="wd">Чт · июн</div><div class="n">→ Берген</div></div>
+      <div class="daybody">
+        <div class="loc">Париж <span class="arrow">↳</span> Берген</div>
+        <span class="leg air"><span class="ic">✈</span> CDG→BGO ПРЯМОЙ · ~2ч15 · Air France/Norwegian · вечер</span>
+        <div class="prog">Прямой рейс вместо Осло и 7-часового поезда — день спасён. Вечером заселение в Бергене, ужин Bryggeloftet.</div>
+        <div class="meta2"><span class="h">Отель:</span><span>Hanseatic Hotel · вид на Bryggen</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">26</div><div class="wd">Пт · июн</div><div class="n">ночь 15</div></div>
+      <div class="daybody">
+        <div class="loc">Берген</div>
+        <span class="leg stay"><span class="ic">●</span> На месте</span>
+        <div class="prog">Bryggen (ганзейские дома XIV в.) · фуникулёр Fløibanen на Fløyen · science-центр VilVite (для детей) · рыбный рынок · ужин Lysverket.</div>
+        <div class="meta2"><span class="tag unesco">UNESCO · Bryggen</span><span class="tag kid">👧 VilVite</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">27</div><div class="wd">Сб · июн</div><div class="n">ночь 16</div></div>
+      <div class="daybody">
+        <div class="loc">Берген <span class="arrow">↳</span> Флом</div>
+        <span class="leg drive"><span class="ic">⌖</span> AWD-кроссовер автомат · E16 ~4ч · старт аренды (Берген→Олесунн, one-way)</span>
+        <div class="prog">Voss и Stalheim · смотровая Stegastein · козья ферма Ундредаль (дети + коричневый сыр) · спуск во Флом · ужин Fretheim.</div>
+        <div class="meta2"><span class="tag kid">👧 ферма коз Ундредаль</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">28</div><div class="wd">Вс · июн</div><div class="n">ночь 17</div></div>
+      <div class="daybody">
+        <div class="loc">Флом · Нерёй-фьорд</div>
+        <span class="leg sea"><span class="ic">⛵</span> Nærøyfjord cruise · 2ч</span>
+        <span class="leg train"><span class="ic">▭</span> Flåm Railway</span>
+        <div class="prog">Круиз по Нерёй-фьорду · знаменитая Фломская ж/д (дети любят) · Borgund Stave Church (1180) · ужин во Флёме.</div>
+        <div class="meta2"><span class="tag unesco">UNESCO · Nærøyfjord</span><span class="tag kid">👧 Flåm Railway + круиз</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">29</div><div class="wd">Пн · июн</div><div class="n">ночь 18</div></div>
+      <div class="daybody">
+        <div class="loc">Флом <span class="arrow">↳</span> Сольворн</div>
+        <span class="leg drive"><span class="ic">⌖</span> тоннель Lærdal 24.5 км</span>
+        <span class="leg sea"><span class="ic">⛵</span> паром Solvorn→Ornes</span>
+        <div class="prog">12:00 паром · Urnes Stave Church (1130 — старейшая) · ледник Nigardsbreen · отель Walaker (с 1690 г.).</div>
+        <div class="meta2"><span class="tag unesco">UNESCO · Urnes</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">30</div><div class="wd">Вт · июн</div><div class="n">ночь 19</div></div>
+      <div class="daybody">
+        <div class="loc">Сольворн <span class="arrow">↳</span> Лом <span class="arrow">↳</span> Гейрангер</div>
+        <span class="leg drive"><span class="ic">⌖</span> Sognefjellsvegen · перевал 1434м · ~5ч · ранний старт</span>
+        <div class="prog">Высочайший перевал Сев. Европы · Lom Stave Church (1158) · обед Bakeriet i Lom · смотровая Dalsnibba 1500м · вечером Гейрангер.</div>
+        <div class="meta2"><span class="tag unesco">UNESCO · Geirangerfjord</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">01</div><div class="wd">Ср · июл</div><div class="n">→ Олесунн</div></div>
+      <div class="daybody">
+        <div class="loc">Гейрангер <span class="arrow">↳</span> Олесунн</div>
+        <span class="leg sea"><span class="ic">⛵</span> RIB-сафари · 50 мин</span>
+        <span class="leg drive"><span class="ic">⌖</span> Trollstigen · 11 поворотов</span>
+        <div class="prog">RIB-сафари под «Семь Сестёр» (детский хит, гидрокостюмы) · «Лестница троллей» Trollstigen · вечером Олесунн (Hotel Brosundet).</div>
+        <div class="meta2"><span class="tag kid">👧 RIB-сафари + Trollstigen</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">02</div><div class="wd">Чт · июл</div><div class="n">→ Ставангер</div></div>
+      <div class="daybody">
+        <div class="loc">Олесунн <span class="arrow">↳</span> Ставангер</div>
+        <span class="leg air"><span class="ic">✈</span> SK4116 · AES→SVG · ~1ч · сдача авто в Олесунне</span>
+        <div class="prog">Утром океанариум Atlanterhavsparken (тюлени, пингвины, акулы — дети) · смотровая Aksla · вылет · вечером Ставангер (Eilert Smith).</div>
+        <div class="meta2"><span class="tag kid">👧 океанариум Atlanterhavsparken</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">03</div><div class="wd">Пт · июл</div><div class="n">ночь 21</div></div>
+      <div class="daybody">
+        <div class="loc">Ставангер · Прейкестулен</div>
+        <span class="leg stay"><span class="ic">●</span> хайк (трансфер/тур)</span>
+        <div class="prog">Хайк Preikestolen (8 км · ~4ч · скала 604м над Lysefjord) · Старый Ставангер · ужин Sabi Omakase.</div>
+        <div class="meta2"><span class="tag kid">👧 проверить готовность к хайку</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 6 -->
+  <section class="stage" id="s6" style="--sc:var(--ice);animation-delay:.12s">
+    <div class="stage-head">
+      <span class="stage-num">ЭТАП 6</span>
+      <h2><span class="flags">🇮🇸</span>Исландия · Ring Road</h2>
+      <span class="stage-meta">04–15.07 · 11 ночей · разгружено: 2-е ночи в Вике и Хёбне</span>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">04</div><div class="wd">Сб · июл</div><div class="n">→ Рейкьявик</div></div>
+      <div class="daybody">
+        <div class="loc">Ставангер <span class="arrow">↳</span> Рейкьявик</div>
+        <span class="leg air"><span class="ic">✈</span> SVG→OSL→KEF · ~6ч с пересадкой</span>
+        <div class="prog">AWD-кроссовер RAV4-класса, автомат (аренда 11 дн; 4WD не нужен — Ring Road асфальт) · Blue Lagoon (2ч) · по пути лавовый тоннель Raufarhólshellir (дети до 12 — бесплатно) · Hotel Borg.</div>
+        <div class="meta2"><span class="tag kid">👧 лавовый тоннель</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">05</div><div class="wd">Вс · июл</div><div class="n">ночь 23</div></div>
+      <div class="daybody">
+        <div class="loc">Рейкьявик</div>
+        <span class="leg stay"><span class="ic">●</span> На месте</span>
+        <div class="prog">Наблюдение за китами (3ч) · Perlan (ледяная пещера, дети) · FlyOver Iceland (симулятор-полёт) · Hallgrímskirkja · Laugavegur.</div>
+        <div class="meta2"><span class="tag kid">👧 Perlan + FlyOver + киты</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">06</div><div class="wd">Пн · июл</div><div class="n">ночь 24</div></div>
+      <div class="daybody">
+        <div class="loc">Рейкьявик <span class="arrow">↳</span> Snæfellsnes</div>
+        <span class="leg drive"><span class="ic">⌖</span> ~2.5ч</span>
+        <div class="prog">Kirkjufell + водопад · дикие тюлени Ytri-Tunga (дети, 5 мин от дороги) · Arnarstapi · чёрная церковь Búðakirkja · отель Búðir.</div>
+        <div class="meta2"><span class="tag kid">👧 тюлени Ytri-Tunga</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">07</div><div class="wd">Вт · июл</div><div class="n">ночь 25</div></div>
+      <div class="daybody">
+        <div class="loc">Snæfellsnes <span class="arrow">↳</span> Золотое кольцо</div>
+        <span class="leg drive"><span class="ic">⌖</span> ~3ч</span>
+        <div class="prog">Þingvellir (тектонический разлом, парламент с 930 г.) · гейзер Strokkur · Gullfoss · Secret Lagoon (тёплый бассейн + мини-гейзер, дети) · отель Frost & Fire.</div>
+        <div class="meta2"><span class="tag unesco">UNESCO · Þingvellir</span><span class="tag kid">👧 Secret Lagoon</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">08</div><div class="wd">Ср · июл</div><div class="n">→ Вик</div></div>
+      <div class="daybody">
+        <div class="loc">Золотое кольцо <span class="arrow">↳</span> Вик</div>
+        <span class="leg drive"><span class="ic">⌖</span> ~2.5ч</span>
+        <div class="prog">Lava Centre (интерактивный музей вулканов, дети) · Seljalandsfoss (заходим за водопад) · Skógafoss 60м · обед на томатной ферме Friðheimar · вечером Вик.</div>
+        <div class="meta2"><span class="tag kid">👧 Lava Centre</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">09</div><div class="wd">Чт · июл</div><div class="n">ночь 27 · отдых</div></div>
+      <div class="daybody">
+        <div class="loc">Вик · 2-я ночь</div>
+        <span class="leg stay"><span class="ic">●</span> без переезда</span>
+        <div class="prog">Чёрный пляж Reynisfjara + базальт · Dyrhólaey · катание на исландских лошадках (плавный аллюр, для детей) · день без гонки.</div>
+        <div class="meta2"><span class="tag kid">👧 исландские лошадки</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">10</div><div class="wd">Пт · июл</div><div class="n">→ Хёбн</div></div>
+      <div class="daybody">
+        <div class="loc">Вик <span class="arrow">↳</span> Хёбн</div>
+        <span class="leg drive"><span class="ic">⌖</span> ~3ч</span>
+        <div class="prog">Каньон Fjaðrárgljúfur · нацпарк Skaftafell + водопад Svartifoss · вечером Хёбн (Fosshotel Glacier Lagoon).</div>
+        <div class="meta2"><span class="tag unesco">UNESCO · Vatnajökull</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">11</div><div class="wd">Сб · июл</div><div class="n">ночь 29 · отдых</div></div>
+      <div class="daybody">
+        <div class="loc">Хёбн · 2-я ночь</div>
+        <span class="leg stay"><span class="ic">●</span> без переезда</span>
+        <div class="prog">Ледниковая лагуна Jökulsárlón (зодиак среди айсбергов) · Diamond Beach · целый день без спешки. ✅ Вместо тяжёлого перегона в Сейдисфьордюр.</div>
+        <div class="meta2"><span class="tag kid">👧 зодиак среди айсбергов</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">12</div><div class="wd">Вс · июл</div><div class="n">→ Mývatn</div></div>
+      <div class="daybody">
+        <div class="loc">Хёбн <span class="arrow">↳</span> Mývatn</div>
+        <span class="leg drive"><span class="ic">⌖</span> ~4.5ч · напрямую, без восточного крюка</span>
+        <div class="prog">Восточное побережье транзитом · Námafjall Hverir (кипящая грязь) · Krafla + кратер Víti · вечером Mývatn Nature Baths.</div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">13</div><div class="wd">Пн · июл</div><div class="n">→ Акюрейри</div></div>
+      <div class="daybody">
+        <div class="loc">Mývatn <span class="arrow">↳</span> Акюрейри · Хусавик</div>
+        <span class="leg drive"><span class="ic">⌖</span> Dimmuborgir · Goðafoss · Хусавик ~1ч</span>
+        <div class="prog">Лавовые поля Dimmuborgir · водопад Goðafoss · Хусавик: киты Gentle Giants (горбачи, 95% — детский хит) · вечером Акюрейри (Hotel Kea).</div>
+        <div class="meta2"><span class="tag kid">👧 киты в Хусавике</span></div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">14</div><div class="wd">Вт · июл</div><div class="n">→ Рейкьявик</div></div>
+      <div class="daybody">
+        <div class="loc">Акюрейри <span class="arrow">↳</span> Рейкьявик</div>
+        <span class="leg air"><span class="ic">✈</span> NY121 · AEY→RKV · 45 мин · вместо 5ч драйва</span>
+        <div class="prog">Перелёт · Sky Lagoon (инфинити на океан) · ужин Grillmarkadurinn · Hotel Borg.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGE 7 -->
+  <section class="stage" id="s7" style="--sc:var(--muted);animation-delay:.14s">
+    <div class="stage-head">
+      <span class="stage-num">ЭТАП 7</span>
+      <h2><span class="flags">🇩🇪</span>Возврат через Франкфурт</h2>
+      <span class="stage-meta">15–16.07 · 1 ночь · Sheraton (в T1)</span>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">15</div><div class="wd">Ср · июл</div><div class="n">ночь 33</div></div>
+      <div class="daybody">
+        <div class="loc">Рейкьявик <span class="arrow">↳</span> Франкфурт</div>
+        <span class="leg air"><span class="ic">✈</span> FI520 · KEF→FRA · 15:25–21:00 · 3ч40м · Business</span>
+        <div class="prog">Завтрак · 10:30 в KEF · сдача авто · вылет 15:25 · 21:00 Франкфурт · по walkway в Sheraton (без выхода из терминала).</div>
+      </div>
+    </div>
+    <div class="day">
+      <div class="daydate"><div class="d">16</div><div class="wd">Чт · июл</div><div class="n">🏠 домой</div></div>
+      <div class="daybody">
+        <div class="loc">Франкфурт <span class="arrow">↳</span> Алматы</div>
+        <span class="leg air"><span class="ic">✈</span> KC222 · FRA→ALA · 08:30–18:50 · 7ч20м · Business flat-bed A321LR</span>
+        <div class="prog">Завтрак 06:30 · 07:00 в Терминале 2 · вылет 08:30 · прилёт Алматы 18:50 · 🏠 дома.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEW PANEL -->
+  <section class="panel" id="review">
+    <h2>Что закрыть до брони</h2>
+    <p class="lead">Финальный маршрут согласован. Осталось закрыть несколько узлов в бронировании — по приоритету.</p>
+    <div class="flags-grid">
+
+      <div class="flag red">
+        <div class="ft"><span class="sev">Чинить</span> Авто в Норвегии: one-way</div>
+        <p>Аренда Берген → Олесунн (27.06–01.07), сдача в аэропорту AES перед рейсом в Ставангер. One-way fee — заложить в бюджет.</p>
+        <p class="fix"><b>→</b> Бронировать именно как one-way Bergen → Ålesund.</p>
+      </div>
+
+      <div class="flag red">
+        <div class="ft"><span class="sev">Чинить</span> Прейкестулен без машины</div>
+        <p>В Ставангер прилетаете без авто (сдали в Олесунне). К тропе Preikestolen нужен трансфер (~40 мин + сезонный паром).</p>
+        <p class="fix"><b>→</b> Организованный тур/трансфер на 03.07.</p>
+      </div>
+
+      <div class="flag amber">
+        <div class="ft"><span class="sev">Проверить</span> Прямой Париж → Берген (25.06)</div>
+        <p>Финал держится на прямом вечернем рейсе CDG→BGO (Air France/Norwegian, ~2 ч 15). Их всего ~1–2 в день.</p>
+        <p class="fix"><b>→</b> Подтвердить рейс на 25.06 при покупке билетов.</p>
+      </div>
+
+      <div class="flag amber">
+        <div class="ft"><span class="sev">Проверить</span> The Weeknd «с колёс» (19.06)</div>
+        <p>Прилёт CPH 14:55 → концерт 20:00 в день перелёта. Билеты куплены, сбой рейса = риск. Bruno Mars 21.06 — уже без риска (вы в Париже).</p>
+        <p class="fix"><b>→</b> Принять риск или взять ранний рейс из Парижа.</p>
+      </div>
+
+      <div class="flag amber">
+        <div class="ft"><span class="sev">Проверить</span> Стыковка в Афинах (15.06)</div>
+        <p>TBS→ATH→CHQ на двух перевозчиках (Air Astana + Aegean) — вероятно разные билеты: пере-сдача багажа.</p>
+        <p class="fix"><b>→</b> Подтвердить ≥2.5–3 ч стыковки или единый билет.</p>
+      </div>
+
+      <div class="flag amber">
+        <div class="ft"><span class="sev">Проверить</span> Норвежские перевалы</div>
+        <p>Sognefjellet (1434м, 30.06) и Trollstigen (01.07) в начале июля обычно открыты, но бывают поздние открытия по погоде.</p>
+        <p class="fix"><b>→</b> Статус дорог на vegvesen.no ближе к дате.</p>
+      </div>
+
+      <div class="flag amber">
+        <div class="ft"><span class="sev">Подтвердить</span> Друзья в Париже</div>
+        <p>Размещение 18–25.06 и присмотр за ребёнок на 19–20 (пока вы на The Weeknd). Единственная внешняя зависимость плана.</p>
+        <p class="fix"><b>→</b> Согласовать даты заранее.</p>
+      </div>
+
+      <div class="flag idea">
+        <div class="ft"><span class="sev">Бронь заранее</span> Поезд, паромы, активности</div>
+        <p>TGV+шаттл на MSM (23.06), Astérix (Futé за 7+ дней), паром Solvorn→Ornes, катер Балос, RIB Гейрангер, Cité des Enfants (по сеансам) — всё сезонное.</p>
+        <p class="fix"><b>→</b> Забронировать ключевое за 2–4 недели.</p>
+      </div>
+
+      <div class="flag idea">
+        <div class="ft"><span class="sev">Готово</span> Темп Исландии</div>
+        <p>Было: 11 ночей почти без днёвок + перегон ~5 ч на восток. Стало: 2-е ночи в Вике и Хёбне, восточный крюк убран.</p>
+        <p class="fix"><b>→</b> ✅ Разгружено под ребёнка.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BUDGET -->
+  <section class="budget">
+    <h2>Бюджет — ориентиры</h2>
+    <div class="btable">
+      <div class="brow"><span class="c">✈️ Перелёты (4 long-haul Business + прямой Париж→Берген + остальное Y)</span><span class="v">~ €8 500</span></div>
+      <div class="brow"><span class="c">🏨 Отели · Париж 5 ночей у друзей (бесплатно) · остальное 4–5★</span><span class="v">~ €7 500</span></div>
+      <div class="brow"><span class="c">🚗 Авто · AWD-кроссовер (автомат): Норвегия 5д + Исландия 11д (Крит и Париж — без машины)</span><span class="v">~ €1 900</span></div>
+      <div class="brow"><span class="c">🚆 Поезда · TGV+шаттл на MSM · RER на Astérix</span><span class="v">~ €300</span></div>
+      <div class="brow"><span class="c">⭐ Активности · 2 концерта · Astérix · детские (RIB, аквариум, Perlan, лошадки, бани)</span><span class="v">+</span></div>
+      <div class="brow"><span class="c">🍽️ Питание ~€80/день на троих · 🛢️ топливо · паромы</span><span class="v">+</span></div>
+      <div class="brow total"><span class="c">Итоговый ориентир (с обоими концертами)</span><span class="v">≈ €26–30k</span></div>
+    </div>
+    <p class="note">Экономия против прошлой версии: Париж у друзей (−отель), MSM поездом (−аренда и −отель), Крит без машины, без Осло. Дальше можно урезать: downgrade отелей в Исландии, без Michelin-ужинов, FRA→ALA в эконом. Точные суммы — после брони.</p>
+  </section>
+
+  <footer>
+    <div>Финальная версия (v3): прямой Берген без Осло, Astérix + детские точки, разгруженная Исландия, MSM поездом, жильё у друзей.</div>
+    <div><a href="https://docs.google.com/spreadsheets/d/1-n44YhMo-d8-f75k7Ohkeq4EXpb_rdcnSHNNUmZZzqc/edit" target="_blank" rel="noopener">Источник · Google Drive</a></div>
+  </footer>
+
+</main>
+
+<div id="lb"><img alt=""><div class="cap"></div></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="eurotrip_assets/data.js"></script>
+<script>
+(function(){
+  var E = window.EUROTRIP || {routes:{},stops:{},images:{}};
+  var imgs = E.images || {};
+  var lb = document.getElementById('lb');
+  function openLb(src,cap){ lb.querySelector('img').src=src; lb.querySelector('.cap').textContent=cap||''; lb.classList.add('on'); }
+  if(lb) lb.addEventListener('click',function(){ this.classList.remove('on'); });
+
+  // hero collage
+  var marquee=['geiranger','msm','jokulsarlon','paris','reykjavik','bryggen','trollstigen','reynisfjara'];
+  var col=document.getElementById('collage');
+  if(col){ marquee.forEach(function(s){ var im=imgs[s]; if(im){ var img=new Image(); img.src=im.file; img.alt=s; img.loading='lazy'; img.onclick=function(){openLb(im.file,'');}; col.appendChild(img);} }); if(!col.children.length) col.style.display='none'; }
+
+  // per-day photo — one per date, in document order (matches the 35-day sequence)
+  var DAY=['tbilisi','tbilisi','mtskheta','chania','crete','elafonissi','paris','copenhagen','copenhagen','p_cite','pa_park','msm','p_zoo','bryggen','bryggen','stegastein','naeroyfjord','urnes','geiranger','trollstigen','alesund','preikestolen','reykjavik','k_perlan','kirkjufell','thingvellir','skogafoss','k_horse','jokulsarlon','jokulsarlon','myvatn','husavik','reykjavik','frankfurt','almaty'];
+  var DAYCAP={tbilisi:'Тбилиси',mtskheta:'Мцхета · Джвари',chania:'Ханья',crete:'Крит · Балос',elafonissi:'Elafonissi',paris:'Париж',copenhagen:'Копенгаген',p_cite:'Cité des Enfants',pa_park:'Parc Astérix',p_zoo:'Зоопарк · Венсен',msm:'Mont Saint-Michel',bryggen:'Берген · Bryggen',stegastein:'Stegastein',naeroyfjord:'Nærøyfjord',urnes:'Urnes · ставкирка',geiranger:'Geirangerfjord',trollstigen:'Trollstigen',alesund:'Олесунн',preikestolen:'Preikestolen',reykjavik:'Рейкьявик',k_perlan:'Perlan · ледяная пещера',kirkjufell:'Kirkjufell',thingvellir:'Þingvellir',skogafoss:'Skógafoss',k_horse:'Исландские лошадки',jokulsarlon:'Jökulsárlón',myvatn:'Mývatn',godafoss:'Goðafoss',husavik:'Húsavík',frankfurt:'Frankfurt',almaty:'Алматы · дом'};
+  document.querySelectorAll('.day').forEach(function(day,i){
+    var slug=DAY[i]; if(!slug) return; var im=imgs[slug]; if(!im) return;
+    var dd=day.querySelector('.daydate'); if(!dd) return;
+    var img=new Image(); img.className='dayphoto'; img.src=im.file; img.loading='lazy'; img.alt=DAYCAP[slug]||slug;
+    img.onclick=function(){ openLb(im.file, DAYCAP[slug]||''); };
+    dd.appendChild(img);
+  });
+
+  // optimization marks on specific days (0-based index = day number - 1)
+  var OPT={
+    18:['pace','⚠ Самый длинный день ~5 ч (перевал Sognefjellet) — ранний старт + остановки'],
+    27:['rest','✅ День отдыха: 2-я ночь в Вике, без переезда'],
+    29:['rest','✅ День отдыха: 2-я ночь в Хёбне — вместо тяжёлого крюка в Сейдисфьордюр']
+  };
+  var allDays=document.querySelectorAll('.day');
+  Object.keys(OPT).forEach(function(k){
+    var d=allDays[+k]; if(!d) return; var b=d.querySelector('.daybody'); if(!b) return;
+    d.classList.add('marked');
+    var bar=document.createElement('div'); bar.className='optbar '+OPT[k][0]; bar.textContent=OPT[k][1];
+    b.insertBefore(bar, b.firstChild);
+  });
+
+  // maps
+  function mkMap(id,key){
+    var r=(E.routes||{})[key];
+    if(!r || !window.L || !document.getElementById(id)) return;
+    var map=L.map(id,{scrollWheelZoom:false});
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:17,attribution:'© OpenStreetMap'}).addTo(map);
+    var pl=L.polyline(r.line,{color:'#C2603A',weight:4,opacity:.85}).addTo(map);
+    ((E.stops||{})[key]||[]).forEach(function(s,i){
+      L.marker([s[2],s[1]],{icon:L.divIcon({className:'',html:'<div class="route-pin">'+(i+1)+'</div>',iconSize:[23,23],iconAnchor:[11,11]})}).addTo(map).bindPopup(s[0]);
+    });
+    try{ map.fitBounds(pl.getBounds().pad(0.12)); }catch(e){}
+    setTimeout(function(){ map.invalidateSize(); },250);
+  }
+  mkMap('map-norway','norway'); mkMap('map-iceland','iceland'); mkMap('map-paris','paris_msm');
+})();
+</script>
+</body>
+</html>

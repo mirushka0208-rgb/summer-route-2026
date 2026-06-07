@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eurotrip 2026 — Hygge-жильё (Airbnb + Booking)</title>
+<style>
+  :root{
+    --cream:#f6efe4; --card:#fffaf2; --ink:#4a382a; --soft:#7c6650;
+    --accent:#b5651d; --accent2:#8a5a2b; --line:#e7dac6; --good:#2e7d52;
+    --tag:#efe3d0;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--cream);color:var(--ink);
+    font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:28px 20px 80px}
+  header.top{text-align:center;padding:24px 0 8px}
+  header.top h1{font-family:Georgia,"Times New Roman",serif;font-size:34px;margin:0 0 6px;color:#5a3e2b}
+  header.top p{margin:4px 0;color:var(--soft)}
+  .legend{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:18px 0 6px;font-size:13.5px}
+  .legend span{background:var(--tag);border:1px solid var(--line);border-radius:20px;padding:4px 12px}
+  .note{background:#fff7e9;border:1px solid #ecd9b6;border-radius:12px;padding:14px 16px;margin:18px 0;font-size:14.5px;color:#6b563c}
+  .timeline{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 6px}
+  .timeline a{text-decoration:none}
+  .chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 13px;font-size:13.5px;color:var(--accent2);white-space:nowrap}
+  h2.city{font-family:Georgia,serif;font-size:25px;margin:40px 0 4px;color:#5a3e2b;border-bottom:2px solid var(--line);padding-bottom:8px}
+  .dates{color:var(--soft);font-size:14px;margin:0 0 16px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+  .c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;box-shadow:0 1px 0 #efe6d6}
+  .c h3{margin:0 0 2px;font-size:17px;color:#5a3e2b}
+  .c .type{font-size:12px;color:var(--accent);text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px}
+  .c .why{font-size:14px;color:#5d4a37;margin:0 0 9px}
+  .c .price{font-weight:600;color:#5a3e2b;font-size:14.5px;margin-bottom:10px}
+  .links{display:flex;flex-wrap:wrap;gap:7px}
+  .links a{font-size:12.5px;text-decoration:none;border-radius:8px;padding:5px 10px;border:1px solid var(--line);color:#5a3e2b;background:#fff}
+  .links a.bk{background:#eef4ff;border-color:#cfe0ff;color:#274b8f}
+  .links a.ab{background:#ffeef0;border-color:#ffd4da;color:#9c2d3c}
+  .links a.web{background:#eef7ee;border-color:#cfe7cf;color:#2e6b40}
+  .badge{display:inline-block;font-size:11.5px;font-weight:600;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle}
+  .saved{background:#e3f3e9;color:#1f6b41;border:1px solid #bfe4cd}
+  .soon{background:#fdeede;color:#9a6418;border:1px solid #f0d3a6}
+  .hero{font-size:12px;color:#9a6418}
+  footer{margin-top:46px;border-top:2px solid var(--line);padding-top:18px;color:var(--soft);font-size:14px}
+  footer h3{color:#5a3e2b;font-family:Georgia,serif;margin:0 0 8px}
+  .small{font-size:12.5px;color:#8a7860}
+  a.plain{color:var(--accent2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>Eurotrip 2026 — Hygge-жильё</h1>
+  <p>Семья: 2 взрослых + ребёнок (8). Уютные, характерные места — historic timber, бутики, фьорд-хижины.</p>
+  <p class="small">Цены — оценки на пик-сезон; подтверждать вживую при брони. Обновлено для маршрута с Осло.</p>
+  <div class="legend">
+    <span>🔗 Booking</span><span>🏠 Airbnb (поиск с фильтром)</span><span>🌐 сайт отеля</span>
+    <span>🛖 хижина/апарт</span><span>✅ уже в твоём списке Booking</span><span>⏳ добавлю в список</span>
+  </div>
+</header>
+
+<div class="note">
+  <b>Что уже сделано:</b> 7 отелей Осло/Бергена/Флома сохранены в твой Booking-список
+  «<a class="plain" href="https://www.booking.com/mywishlist.html?wl_id=3903729521">Eurotrip 2026 — Норвегия</a>».
+  Остальные (фьорды, Ставангер, Крит, Копенгаген) — ниже с прямыми ссылками: жмёшь ❤ и они летят в тот же список.
+  <b>Airbnb:</b> прямого API нет, поэтому даю ссылки-поиски с уже выставленными датами и гостями — открываешь и сохраняешь понравившееся в один тап.
+</div>
+
+<div class="timeline">
+  <a href="#crete"><span class="chip">🇬🇷 Крит 15–18.06</span></a>
+  <a href="#cph"><span class="chip">🇩🇰 Копенгаген 18–20.06</span></a>
+  <a href="#paris"><span class="chip">🇫🇷 Париж 20–25.06</span></a>
+  <a href="#oslo"><span class="chip">🇳🇴 Осло 25–27.06</span></a>
+  <a href="#bergen"><span class="chip">Берген 27–28.06</span></a>
+  <a href="#flam"><span class="chip">Флом 28–29.06</span></a>
+  <a href="#solvorn"><span class="chip">Сольворн 29–30.06</span></a>
+  <a href="#geiranger"><span class="chip">Гейрангер 30.06–01.07</span></a>
+  <a href="#alesund"><span class="chip">Олесунн / Атлантик-роуд 01–02.07</span></a>
+  <a href="#stavanger"><span class="chip">Ставангер 02–04.07</span></a>
+  <a href="#iceland"><span class="chip">🇮🇸 Исландия 04–15.07</span></a>
+  <a href="#frankfurt"><span class="chip">🇩🇪 Франкфурт 15–16.07</span></a>
+</div>
+
+<!-- ================= CRETE ================= -->
+<h2 class="city" id="crete">🇬🇷 Крит / Ханья — на берегу моря</h2>
+<p class="dates">15–18.06 (3 ночи) · 2 взр + 1 реб · вилла с бассейном у моря</p>
+<div class="note" style="margin-top:0">💡 <b>Стратегия:</b> мгновенные брони (Cavo Spada / Arion / Minoa) можно закрепить сразу как «страховку», параллельно писать в частные виллы. ⚠️ Многие виллы летом требуют 5–7 ночей — спрашивать про 3.</div>
+<div class="grid">
+  <div class="c">
+    <h3>Giannoulis Cavo Spada 5★ <span class="badge saved">мгновенно</span></h3>
+    <div class="type">Бич-резорт · Колимвари · Blue Flag</div>
+    <p class="why">Семейный 5★ на пляже с флагом, ~30 мин от Ханьи: бассейны, детский клуб, семейные номера. Берёт 3 ночи — закрепить быстро.</p>
+    <div class="price">~€700–1300 / 3 ночи (часто полупансион)</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/gr/cavo-spada-luxury-resort-spa.html">🔗 Booking</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Arion Hotel <span class="badge saved">мгновенно · value</span></h3>
+    <div class="type">Бичфронт-отель · Колимвари</div>
+    <p class="why">5 мин до пляжа Рапаньяна, свой участок пляжа + сезонный бассейн, семейные номера. Просто и недорого, 3 ночи ок.</p>
+    <div class="price">~€300–550 / 3 ночи</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/gr/arion-kolymvari1.html">🔗 Booking</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Villa Isalos <span class="hero">★ у самого пляжа</span></h3>
+    <div class="type">Частная вилла · пляж Гларос · 5 км до Ханьи</div>
+    <p class="why">Дверь на песчаный Гларос, подогрев. бассейн 30 м² (бесплатно, за 7 дней), BBQ; до таверн пешком — база без машины. Уточнить 3 ночи.</p>
+    <div class="price">по запросу ~€1200–2100 / 3 ночи</div>
+    <div class="links">
+      <a class="web" href="https://villaisalos.com/">🌐 сайт</a>
+      <a class="ab" href="https://www.airbnb.com/rooms/51459686">🏠 Airbnb</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Villa Georgia <span class="badge soon">детям рай</span></h3>
+    <div class="type">Частная вилла · Афрата (Колимвари) · Booking</div>
+    <p class="why">3 спальни, подогрев. бассейн 8×4 + детская секция + джакузи, крытая игровая. ~600 м до бухты Афрата. Уточнить 3 ночи.</p>
+    <div class="price">~€600–1100 / 3 ночи</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/gr/villa-georgia-kolymvari.html">🔗 Booking</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Villa Andreas <span class="badge saved">без мин. срока</span></h3>
+    <div class="type">Частная вилла · Тавронитис · ~1 км до пляжа</div>
+    <p class="why">3 спальни (до 7), приватный бассейн 7.5×4 + отдельный детский, кроватка/стульчик. БЕЗ строгого минимума ночей — удобно ровно на 3.</p>
+    <div class="price">~€300–500 / 3 ночи (от ~€99/н)</div>
+    <div class="links">
+      <a class="web" href="https://bookings.freelancevillas.com/rentals/villa-tavronitis-villa-andreas-327938.html">🌐 freelancevillas</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Youphoria Beach Front Villas</h3>
+    <div class="type">Частные виллы · Драпаньяс/Кисамос · бичфронт</div>
+    <p class="why">Каменные виллы прямо на берегу залива Кисамос, ~8 мин до пляжа, приватные бассейны, вид на море. Рядом Фаласарна/Балос.</p>
+    <div class="price">по запросу ~€1100–1900 / 3 ночи</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/gr/youphoria-beach-front-villas.html">🔗 Booking</a>
+      <a class="web" href="https://www.youphoriavillascrete.com/">🌐 сайт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Villa Aquamarine / Turquoise <span class="badge soon">⚠️ мин. 5–7 ночей?</span></h3>
+    <div class="type">Частные виллы · Рапаньяна · ~50 м до моря</div>
+    <p class="why">Каменные виллы у самой воды, приватный бассейн, сад, BBQ. Красиво, но летом часто минимум 5–7 ночей — обязательно спросить про 3.</p>
+    <div class="price">по запросу ~€1300–2400 / 3 ночи</div>
+    <div class="links">
+      <a class="web" href="https://www.cretevillas4u.com/en/Crete/Chania/Aqua-Marine">🌐 Aquamarine</a>
+      <a class="web" href="https://www.cretevillas4u.com/en/Crete/Chania/Turquoise">🌐 Turquoise</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Minoa Palace Resort 5★ <span class="badge soon">фоллбэк instant</span></h3>
+    <div class="type">Отель · Платаньяс · 4 бассейна</div>
+    <p class="why">Мгновенная бронь, прямой выход к пляжу, мини-клуб — надёжный запас, если виллы не дадут 3 ночи.</p>
+    <div class="price">~€350–500 / 3 ночи</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/gr/minoa-palace-resort-spa.html">🔗 Booking</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= COPENHAGEN ================= -->
+<h2 class="city" id="cph">🇩🇰 Копенгаген — родина hygge</h2>
+<p class="dates">18–20.06 · концерт The Weeknd 19.06 · <span class="small">(уточнить: 2 взр или семьёй)</span></p>
+<div class="grid">
+  <div class="c">
+    <h3>Hotel Sanders</h3>
+    <div class="type">Бутик-отель · у Нюхавна</div>
+    <p class="why">Эталон скандинавского уюта — ротанг, бархат, камин-лаунж, крыша-терраса. Тихий люкс в центре.</p>
+    <div class="price">~€320–480/н</div>
+    <div class="links">
+      <a class="web" href="https://hotelsanders.com/">🌐 сайт</a>
+      <a class="bk" href="https://www.booking.com/searchresults.html?ss=Copenhagen&checkin=2026-06-18&checkout=2026-06-20&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Hotel SP34 / Brøchner</h3>
+    <div class="type">Дизайн-отель · Латинский квартал</div>
+    <p class="why">Тёплый датский минимализм, вечерний «wine hour», уютные номера. Средний по цене.</p>
+    <div class="price">~€200–320/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/searchresults.html?ss=Copenhagen%20city%20center&checkin=2026-06-18&checkout=2026-06-20&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Квартира в Нюхавне / Эстербро</h3>
+    <div class="type">🛖 Airbnb · цветные таунхаусы</div>
+    <p class="why">Снять характерную квартиру у воды или в Эстербро (рядом с Parken — место концерта).</p>
+    <div class="price">~€180–300/н</div>
+    <div class="links">
+      <a class="ab" href="https://www.airbnb.com/s/Copenhagen--Denmark/homes?checkin=2026-06-18&checkout=2026-06-20&adults=2&children=1">🏠 поиск Копенгаген</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= PARIS ================= -->
+<h2 class="city" id="paris">🇫🇷 Париж — у друзей</h2>
+<p class="dates">20–25.06 · жильё не нужно</p>
+<div class="note" style="margin-top:0">Останавливаемся у друзей — бронь не требуется. Активности: Cité des Enfants, зоопарк Венсен, <b>Parc Astérix</b>, Mont-Saint-Michel поездом. (Bruno Mars 21.06 — опция.)</div>
+
+<!-- ================= OSLO ================= -->
+<h2 class="city" id="oslo">🇳🇴 Осло — вход в Норвегию</h2>
+<p class="dates">25–27.06 (2 ночи) · центр, у вокзала Oslo S (утром поезд Bergensbanen)</p>
+<div class="grid">
+  <div class="c">
+    <h3>Amerikalinjen <span class="badge saved">✅ сохранено</span></h3>
+    <div class="type">Бутик-отель · 1919, у Oslo S</div>
+    <p class="why">Бывший штаб океанских лайнеров: латунь, кожа, джаз-бар. Рейтинг 8.9.</p>
+    <div class="price">~€270–390/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/no/amerikalinjen.html?checkin=2026-06-25&checkout=2026-06-27&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+      <a class="web" href="https://amerikalinjen.com/">🌐 сайт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Hotel Bristol <span class="badge saved">✅ сохранено</span></h3>
+    <div class="type">Историк-отель · 1920</div>
+    <p class="why">Зимний сад в мавританском стиле, камины, библиотека-бар — классический семейный уют.</p>
+    <div class="price">~€210–300/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/no/bristol.html?checkin=2026-06-25&checkout=2026-06-27&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+      <a class="web" href="https://hotelbristol.no/en/">🌐 сайт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Frogner House — Skovveien <span class="badge saved">✅ сохранено</span></h3>
+    <div class="type">🛖 Апарт-отель · Фрогнер</div>
+    <p class="why">Целая квартира с кухней и паркетом в зелёном районе — приготовить завтрак перед поездом.</p>
+    <div class="price">~€170–250/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/no/frogner-house-apartments.html?checkin=2026-06-25&checkout=2026-06-27&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+      <a class="ab" href="https://www.airbnb.com/s/Oslo--Norway/homes?checkin=2026-06-25&checkout=2026-06-27&adults=2&children=1">🏠 Airbnb-альтернатива</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= BERGEN ================= -->
+<h2 class="city" id="bergen">Берген — у Брюггена</h2>
+<p class="dates">27–28.06 (1 ночь) · приезд поездом днём</p>
+<div class="grid">
+  <div class="c">
+    <h3>Opus XVI <span class="badge saved">✅ сохранено</span></h3>
+    <div class="type">Бутик · 1876 · SLH</div>
+    <p class="why">Банк, превращённый в отель потомками Грига; номера по его произведениям. Рейтинг 9.1.</p>
+    <div class="price">~€260–380/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/no/opus-xvi.html?checkin=2026-06-27&checkout=2026-06-28&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+      <a class="web" href="https://www.opus16.no/">🌐 сайт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Det Hanseatiske Hotel <span class="badge saved">✅ сохранено</span></h3>
+    <div class="type">Историк · на самом Брюггене</div>
+    <p class="why">Отель внутри ганзейского торгового дома XVIII в.: балки, свечи, скрипучее дерево.</p>
+    <div class="price">~€220–320/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/no/det-hanseatiske.html?checkin=2026-06-27&checkout=2026-06-28&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+      <a class="web" href="https://www.dethanseatiskehotel.no/">🌐 сайт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Квартира у Скансена / Флёйена</h3>
+    <div class="type">🛖 Airbnb · вид на фьорд</div>
+    <p class="why">Уютная квартира в 5–10 мин от Брюггена, часто с видом на залив — если хочется кухни.</p>
+    <div class="price">~€150–230/н</div>
+    <div class="links">
+      <a class="ab" href="https://www.airbnb.com/s/Bergen--Norway/homes?checkin=2026-06-27&checkout=2026-06-28&adults=2&children=1">🏠 поиск Берген</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= FLÅM ================= -->
+<h2 class="city" id="flam">Флом — у Аурландс-фьорда</h2>
+<p class="dates">28–29.06 (1 ночь) · берём авто здесь</p>
+<div class="grid">
+  <div class="c">
+    <h3>Fretheim Hotel <span class="badge saved">✅ сохранено</span></h3>
+    <div class="type">Историк · 1870 · у воды и вокзала</div>
+    <p class="why">Белый деревянный отель-легенда, антикварные «исторические» номера с ваннами на ножках.</p>
+    <div class="price">~€240–360/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/no/fretheim.html?checkin=2026-06-28&checkout=2026-06-29&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+      <a class="web" href="https://www.norwaysbest.com/en/flam/accommodation/fretheim-hotel">🌐 сайт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Flåmsbrygga Hotel <span class="badge saved">✅ сохранено</span></h3>
+    <div class="type">Рустик · на пристани</div>
+    <p class="why">Дерево, балконы над фьордом, викинг-паб Ægir с пивоварней внизу — снаружи и внутри уют.</p>
+    <div class="price">~€200–300/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/no/flamsbrygga-hotell.html?checkin=2026-06-28&checkout=2026-06-29&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+      <a class="web" href="https://en.flamsbrygga.no/">🌐 сайт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Fretheim Fjordhytter <span class="badge soon">🛖 хижина</span></h3>
+    <div class="type">Рорбу на воде · 3 спальни</div>
+    <p class="why">Самокейтеринг-хижина прямо у воды, 5 мин до станции, лодка в комплекте — wood-and-wool классика.</p>
+    <div class="price">~€200–320/н (вся хижина)</div>
+    <div class="links">
+      <a class="web" href="https://www.fretheimhytter.com/">🌐 сайт</a>
+      <a class="ab" href="https://www.airbnb.com/s/Flam--Norway/homes?checkin=2026-06-28&checkout=2026-06-29&adults=2&children=1">🏠 поиск Флом</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= SOLVORN ================= -->
+<h2 class="city" id="solvorn">Сольворн — Люстра-фьорд</h2>
+<p class="dates">29–30.06 (1 ночь) · <span class="small">бронь напрямую ASAP — крошечный отель</span></p>
+<div class="grid">
+  <div class="c">
+    <h3>Walaker Hotell <span class="badge soon">⏳ бронь напрямую</span></h3>
+    <div class="type">Историк · с ~1640 · у фьорда</div>
+    <p class="why">Один из старейших отелей Норвегии в семейном владении 9 поколений; сад, галерея, фьорд. 22 номера — разбирают.</p>
+    <div class="price">~€350–470/н (часто полупансион)</div>
+    <div class="links">
+      <a class="web" href="https://www.walaker.com/">🌐 walaker.com</a>
+      <a class="ab" href="https://www.airbnb.com/s/Solvorn--Norway/homes?checkin=2026-06-29&checkout=2026-06-30&adults=2&children=1">🏠 поиск рядом</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Sognefjord Apartments <span class="badge soon">бэкап</span></h3>
+    <div class="type">🛖 Апартаменты · Marifjøra</div>
+    <p class="why">Современные фьорд-апартаменты с кухней неподалёку, если Walaker занят.</p>
+    <div class="price">~€190–210/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/searchresults.html?ss=Solvorn&checkin=2026-06-29&checkout=2026-06-30&group_adults=2&group_children=1&age=8">🔗 Booking рядом</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= GEIRANGER ================= -->
+<h2 class="city" id="geiranger">Гейрангер — UNESCO-фьорд</h2>
+<p class="dates">30.06–01.07 (1 ночь)</p>
+<div class="grid">
+  <div class="c">
+    <h3>Hotel Union Geiranger <span class="badge soon">⏳ добавлю в список</span></h3>
+    <div class="type">Историк · 4★ · спа</div>
+    <p class="why">Легендарный фьорд-отель с видом на серпантин «Орлиная дорога», семейные номера, спа, музей старых авто.</p>
+    <div class="price">~€370–520/н (вкл. завтрак)</div>
+    <div class="links">
+      <a class="web" href="https://www.hotelunion.no/">🌐 hotelunion.no</a>
+      <a class="bk" href="https://www.booking.com/searchresults.html?ss=Geiranger&checkin=2026-06-30&checkout=2026-07-01&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Grande Fjord Hotel <span class="badge soon">бэкап</span></h3>
+    <div class="type">Отель / хижины · у воды</div>
+    <p class="why">Прямо на берегу фьорда чуть в стороне от посёлка, есть хижины — тише и дешевле.</p>
+    <div class="price">~€210–280/н</div>
+    <div class="links">
+      <a class="ab" href="https://www.airbnb.com/s/Geiranger--Norway/homes?checkin=2026-06-30&checkout=2026-07-01&adults=2&children=1">🏠 поиск Гейрангер</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ÅLESUND / ATLANTIC ROAD ================= -->
+<h2 class="city" id="alesund">Олесунн / Атлантическая дорога</h2>
+<p class="dates">01–02.07 (1 ночь) · <span class="small">зависит от решения по Атлантик-роуд: Олесунн ИЛИ Кристиансунн</span></p>
+<div class="grid">
+  <div class="c">
+    <h3>Hotel Brosundet <span class="badge soon">⏳ добавлю в список</span></h3>
+    <div class="type">Бутик · ар-нуво Олесунн · у воды</div>
+    <p class="why">Бывший рыбный склад на канале, знаменитый номер №47 в маяке Molja. Дизайн + тепло дерева.</p>
+    <div class="price">~€280–420/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/hotel/no/brosundet.html?checkin=2026-07-01&checkout=2026-07-02&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+      <a class="web" href="https://www.brosundet.no/en/">🌐 сайт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Håholmen Havstuer <span class="badge soon">🛖 Атлантик-роуд</span></h3>
+    <div class="type">Рорбу · историческая рыбацкая деревня</div>
+    <p class="why">Если едем Атлантической дорогой: ночёвка в деревянных рорбу на островке у Аверёй, добираться катером. Атмосфера.</p>
+    <div class="price">~€160–260/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/searchresults.html?ss=Averoy%20Atlantic%20Road&checkin=2026-07-01&checkout=2026-07-02&group_adults=2&group_children=1&age=8">🔗 Booking Аверёй</a>
+      <a class="ab" href="https://www.airbnb.com/s/Averoy--Norway/homes?checkin=2026-07-01&checkout=2026-07-02&adults=2&children=1">🏠 поиск</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= STAVANGER ================= -->
+<h2 class="city" id="stavanger">Ставангер — база для Прейкестулена</h2>
+<p class="dates">02–04.07 (2 ночи) · <span class="small">Eilert Smith — 12 номеров, бронь напрямую ASAP</span></p>
+<div class="grid">
+  <div class="c">
+    <h3>Eilert Smith Hotel <span class="badge soon">⏳ бронь напрямую</span></h3>
+    <div class="type">Дизайн-отель · 12 номеров · у гавани</div>
+    <p class="why">Крошечный архитектурный отель в функционалистском здании, мишленовский ресторан RE-NAA. Уточнить 3-е спальное место.</p>
+    <div class="price">~€900–1300 / 2 ночи</div>
+    <div class="links">
+      <a class="web" href="https://eilertsmith.no/">🌐 eilertsmith.no · +47 480 50 800</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Дом в Гамле-Ставангере</h3>
+    <div class="type">🛖 Airbnb · старый белый город</div>
+    <p class="why">Деревянный домик XVIII в. в самом фотогеничном квартале Норвегии — тихо и аутентично.</p>
+    <div class="price">~€180–300/н</div>
+    <div class="links">
+      <a class="ab" href="https://www.airbnb.com/s/Stavanger--Norway/homes?checkin=2026-07-02&checkout=2026-07-04&adults=2&children=1">🏠 поиск Ставангер</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Thon Hotel Stavanger <span class="badge soon">бэкап</span></h3>
+    <div class="type">Отель · центр</div>
+    <p class="why">Надёжный средний вариант рядом с портом и старым городом, если бутики заняты.</p>
+    <div class="price">~€300–440 / 2 ночи</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/searchresults.html?ss=Stavanger&checkin=2026-07-02&checkout=2026-07-04&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ICELAND ================= -->
+<h2 class="city" id="iceland">🇮🇸 Исландия — отельная цепочка по Кольцу</h2>
+<p class="dates">04–15.07 · 8 ночёвок + аренда авто · <b>кэмпер отменён</b> · 2 варианта на стоп (уют / value)</p>
+<div class="note" style="margin-top:0">⚠️ <b>Июль — пик, бронировать СРОЧНО.</b> Загородные флагманы (Búðir, Rangá, отели у ледниковой лагуны, Mývatn/Акюрейри) разбирают за месяцы — брать тарифы с бесплатной отменой сейчас. Грубый итог по Исландии: отели ~€2900–4500 + авто ~€1700–2700.</div>
+<div class="grid">
+  <div class="c">
+    <h3>Рейкьявик · Kvosin Downtown <span class="hero">уют</span></h3>
+    <div class="type">Бутик-апарт · 04–06.07 (2н)</div>
+    <p class="why">Дом 1900 г. за Собором, кухоньки, тёмно-уютные номера.</p>
+    <div class="price">~€640–860 / 2н</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/kvosin-downtown.html?checkin=2026-07-04&checkout=2026-07-06&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://www.kvosinhotel.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Рейкьявик · Hotel Borg 4★ <span class="hero">характер</span></h3>
+    <div class="type">Ар-деко · 04–06.07 (2н)</div>
+    <p class="why">Легенда в стиле ар-деко на главной площади, спа, джакузи.</p>
+    <div class="price">~€720–980 / 2н</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/borg.html?checkin=2026-07-04&checkout=2026-07-06&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://keahotels.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Snæfellsnes · Hótel Búðir <span class="badge soon">бронь первым</span></h3>
+    <div class="type">Историк у моря · 06–07.07</div>
+    <p class="why">Культовый отель на лаве у океана, виды на ледник, ресторан. Разбирают раньше всех.</p>
+    <div class="price">~€330–520</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/budir-snaefellsbaer.html?checkin=2026-07-06&checkout=2026-07-07&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://www.hotelbudir.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Snæfellsnes · Fosshotel Stykkishólmur <span class="hero">value</span></h3>
+    <div class="type">3★ · 06–07.07 · у Kirkjufell</div>
+    <p class="why">Обновлённый отель в рыбацком городке, виды на море.</p>
+    <div class="price">~€190–290</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/stykkisholmur.html?checkin=2026-07-06&checkout=2026-07-07&group_adults=2&group_children=1&age=8">🔗 Booking</a></div>
+  </div>
+  <div class="c">
+    <h3>Golden Circle · Hótel Rangá 4★ <span class="hero">уют</span></h3>
+    <div class="type">Лодж у реки · 07–08.07</div>
+    <p class="why">Горячие чаны под небом, обсерватория, виды на Heklu. Флагман — бронь рано.</p>
+    <div class="price">~€420–650</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/ranga-hella.html?checkin=2026-07-07&checkout=2026-07-08&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://www.hotelranga.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Golden Circle · Frost and Fire <span class="hero">value/дизайн</span></h3>
+    <div class="type">Бутик · Hveragerði · 07–08.07</div>
+    <p class="why">У реки Varmá: геотермальный бассейн, 2 чана, сауна.</p>
+    <div class="price">~€230–330</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/frost-and-fire.html?checkin=2026-07-07&checkout=2026-07-08&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://www.frostandfire.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Вик · Hótel Kría <span class="hero">дизайн</span></h3>
+    <div class="type">Дизайн-отель 2018 · 08–10.07 (2н)</div>
+    <p class="why">Современный отель, номера с видом на горы, 5 мин до чёрного пляжа.</p>
+    <div class="price">~€520–740 / 2н</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/kria.html?checkin=2026-07-08&checkout=2026-07-10&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://www.hotelkria.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Вик · Hotel Vík í Mýrdal <span class="hero">value</span></h3>
+    <div class="type">3★ · 08–10.07 (2н)</div>
+    <p class="why">Семейные номера, 6 мин пешком до чёрного пляжа.</p>
+    <div class="price">~€430–620 / 2н</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/vik.html?checkin=2026-07-08&checkout=2026-07-10&group_adults=2&group_children=1&age=8">🔗 Booking</a></div>
+  </div>
+  <div class="c">
+    <h3>Хёбн · Hali Country Hotel <span class="hero">ферма</span></h3>
+    <div class="type">Фермерский отель · 10–12.07 (2н)</div>
+    <p class="why">12 км от ледниковой лагуны, виды на ледник и океан, музей на месте.</p>
+    <div class="price">~€420–620 / 2н</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/hali-country.html?checkin=2026-07-10&checkout=2026-07-12&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://www.hali.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Хёбн · Fosshotel Glacier Lagoon 4★ <span class="hero">wow</span></h3>
+    <div class="type">4★ superior · 10–12.07 (2н)</div>
+    <p class="why">Дерево, спа, между Skaftafell и Jökulsárlón. Премиум, но мест больше.</p>
+    <div class="price">~€560–820 / 2н</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/fosshotel-glacier-lagoon.html?checkin=2026-07-10&checkout=2026-07-12&group_adults=2&group_children=1&age=8">🔗 Booking</a></div>
+  </div>
+  <div class="c">
+    <h3>Mývatn · Dimmuborgir Guesthouse <span class="hero">хижины</span></h3>
+    <div class="type">Озёрная ферма · 12–13.07</div>
+    <p class="why">Коттеджи с видом на озеро и вулкан в первом ряду, горячий чан.</p>
+    <div class="price">~€170–270</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/dimmuborgir-guesthouse.html?checkin=2026-07-12&checkout=2026-07-13&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://dimmuborgir.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Mývatn · Sel-Hótel Mývatn <span class="hero">value</span></h3>
+    <div class="type">Семейный · 12–13.07</div>
+    <p class="why">Два деревянных чана + сауна, у псевдократеров.</p>
+    <div class="price">~€210–320</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/searchresults.html?ss=Myvatn&checkin=2026-07-12&checkout=2026-07-13&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://www.myvatn.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Акюрейри · Hotel Kea 4★ <span class="hero">характер</span></h3>
+    <div class="type">4★ в центре · 13–14.07</div>
+    <p class="why">Единственный 4★ в городе, на пешеходной улице у фьорда.</p>
+    <div class="price">~€230–340</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/hotelkea.html?checkin=2026-07-13&checkout=2026-07-14&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://keahotels.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>Акюрейри · Berjaya Akureyri <span class="hero">value</span></h3>
+    <div class="type">3★ центр · 13–14.07</div>
+    <p class="why">Центр, до геотермального бассейна 2 мин.</p>
+    <div class="price">~€180–280</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/icelandairhotel-akureyri.html?checkin=2026-07-13&checkout=2026-07-14&group_adults=2&group_children=1&age=8">🔗 Booking</a></div>
+  </div>
+  <div class="c">
+    <h3>KEF · Hotel Berg <span class="hero">у аэропорта</span></h3>
+    <div class="type">4★ бутик · 14–15.07 · перед вылетом</div>
+    <p class="why">У марины, бассейн на крыше, бесплатный шаттл — под ранний рейс во Франкфурт.</p>
+    <div class="price">~€200–300</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/berg.html?checkin=2026-07-14&checkout=2026-07-15&group_adults=2&group_children=1&age=8">🔗 Booking</a><a class="web" href="https://www.hotelberg.is/">🌐 сайт</a></div>
+  </div>
+  <div class="c">
+    <h3>KEF · Aurora Hotel <span class="hero">value · у терминала</span></h3>
+    <div class="type">100 м от терминала · 14–15.07</div>
+    <p class="why">Завтрак с 04:00, семейные удобства — если рейс совсем ранний.</p>
+    <div class="price">~€170–260</div>
+    <div class="links"><a class="bk" href="https://www.booking.com/hotel/is/airport-sma-ri.html?checkin=2026-07-14&checkout=2026-07-15&group_adults=2&group_children=1&age=8">🔗 Booking</a></div>
+  </div>
+  <div class="c" style="border-color:#d9c4a0;background:#fff7ea">
+    <h3>🚗 Аренда авто (KEF ↔ KEF, 11 дн)</h3>
+    <div class="type">Автомат · 2WD / компакт-SUV · НЕ 4×4</div>
+    <p class="why">Кольцо полностью асфальт — 4×4 не нужен. <b>All-in ~€1700–2700</b> (авто €850–1450 + дорожный налог ~€10/д + страховка €15–35/д + бензин ~€600–950). Автоматы разбирают в пик — брать сейчас.</p>
+    <div class="links"><a class="web" href="https://www.bluecarrental.is/">🌐 Blue Car Rental</a><a class="web" href="https://www.lotuscarrental.is/">🌐 Lotus</a></div>
+  </div>
+</div>
+
+<!-- ================= FRANKFURT ================= -->
+<h2 class="city" id="frankfurt">🇩🇪 Франкфурт — транзит домой</h2>
+<p class="dates">15–16.07 (1 ночь) · перед утренним рейсом в Алматы</p>
+<div class="grid">
+  <div class="c">
+    <h3>Sheraton Frankfurt Airport</h3>
+    <div class="type">Отель · в Терминале 1</div>
+    <p class="why">Прямо в аэропорту (переход к выходам), не нужен трансфер — идеально под ранний вылет.</p>
+    <div class="price">~€160–240/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/searchresults.html?ss=Frankfurt%20Airport&checkin=2026-07-15&checkout=2026-07-16&group_adults=2&group_children=1&age=8">🔗 Booking аэропорт</a>
+    </div>
+  </div>
+  <div class="c">
+    <h3>Hilton Frankfurt Airport <span class="badge soon">альт</span></h3>
+    <div class="type">Отель · The Squaire, у Терминала 1</div>
+    <p class="why">Тоже соединён с аэропортом и ж/д; тихие номера, удобно с ребёнком после Исландии.</p>
+    <div class="price">~€170–250/н</div>
+    <div class="links">
+      <a class="bk" href="https://www.booking.com/searchresults.html?ss=Hilton%20Frankfurt%20Airport&checkin=2026-07-15&checkout=2026-07-16&group_adults=2&group_children=1&age=8">🔗 Booking</a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <h3>Как пользоваться</h3>
+  <p>🔗 <b>Booking</b> — даты и гости уже зашиты в ссылку; на странице отеля жми ❤, и он сохранится в список
+  «<a class="plain" href="https://www.booking.com/mywishlist.html?wl_id=3903729521">Eurotrip 2026 — Норвегия</a>» (там, куда я уже сложил 7 отелей).<br>
+  🏠 <b>Airbnb</b> — ссылка открывает поиск с нужными датами; сохраняй понравившееся в Wishlist в один тап.<br>
+  🌐 <b>Сайт</b> — для крошечных отелей (Walaker, Eilert Smith, Håholmen) бронь <b>только напрямую и срочно</b>.</p>
+  <p class="small">⏳ = ещё добавлю в твой Booking-список (фьорды/Ставангер) — как доедут две оставшиеся подборки.
+  Цены — оценки на пик-сезон, подтверждать вживую. Не забудь пред-трип: <b>IDP (Венская 1968) + кредитка на водителя</b> для проката.</p>
+</footer>
+
+</div>
+</body>
+</html>
