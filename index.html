@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,900;1,9..144,500&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <style>
   :root{
     --paper:#F4EFE6;
@@ -316,22 +315,6 @@
         <div class="gmark" style="left:26.47%"></div><div class="gmark-lbl" style="left:26.47%;top:23px">Bruno Mars 21.06</div>
       </div></div>
     </div></div>
-  </section>
-
-  <!-- MAPS -->
-  <section class="sec" id="maps">
-    <h2>Авто-перегоны — на карте</h2>
-    <p class="sublead">Машина теперь только в двух местах: Норвегия и исландский Ring Road (Крит — без аренды, MSM — поездом, Париж — метро). Реальная дорожная геометрия этих двух участков:</p>
-    <div class="maprow">
-      <div class="mapcard">
-        <div class="mh"><b>🇳🇴 Норвегия · Берген → Олесунн</b><span class="mstat"><em>665 км · ~12 ч руля</em> · фьорды, перевалы, ставкирки, RIB</span></div>
-        <div class="map" id="map-norway"></div>
-      </div>
-      <div class="mapcard">
-        <div class="mh"><b>🇮🇸 Исландия · Ring Road (разгружено)</b><span class="mstat"><em>1335 км · ~19.6 ч руля</em> · без восточного крюка · обратно самолётом</span></div>
-        <div class="map" id="map-iceland"></div>
-      </div>
-    </div>
   </section>
 
   <!-- ЖИЛЬЁ — ПОДБОРКИ ПО ЭТАПАМ -->
@@ -1228,7 +1211,6 @@
 </main>
 
 <div id="lb"><img alt=""><div class="cap"></div></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script src="eurotrip_assets/data.js"></script>
 <script>
 (function(){
@@ -1281,7 +1263,6 @@
     try{ map.fitBounds(pl.getBounds().pad(0.12)); }catch(e){}
     setTimeout(function(){ map.invalidateSize(); },250);
   }
-  mkMap('map-norway','norway'); mkMap('map-iceland','iceland'); mkMap('map-paris','paris_msm');
 })();
 </script>
 </body>
